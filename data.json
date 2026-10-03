@@ -1841,6 +1841,16 @@
         "ratio": "1 / 1",
         "image": "maps/139.png",
         "nsfw": false
+    },
+    {
+        "id": "ma-140",
+        "author": "Twedis",
+        "title": "",
+        "date": "2022-04",
+        "size": "1x1",
+        "ratio": "1 / 1",
+        "image": "maps/140.png",
+        "nsfw": false
     }
     ]
 }
