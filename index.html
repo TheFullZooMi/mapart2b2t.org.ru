@@ -1,0 +1,2799 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Галерея мап-арта — 2b2t.org.ru</title>
+
+
+<style>
+
+
+:root,
+[data-theme="midnight"] {
+    --bg:#101522; --bg-secondary:#273450; --container:#1b2436; --card:#232f45;
+    --text:#f0f3fa; --muted:#a8b4c9; --accent:#91a9d8; --accent-hover:#abc0e8;
+    --border:rgba(210,220,240,.12); --shadow:0 12px 40px rgba(5,8,15,.28); --shadow-hover:0 20px 50px rgba(5,8,15,.42);
+    --viewer:rgba(5,8,14,.94); --glass:rgba(28,37,55,.84);
+}
+
+[data-theme="sky"] {
+    --bg:#1b2638; --bg-secondary:#466581; --container:#273a50; --card:#324963;
+    --text:#f1f5f8; --muted:#b3c4d2; --accent:#9fc7dc; --accent-hover:#b8d9e8;
+    --border:rgba(220,235,245,.15); --shadow:0 12px 40px rgba(12,24,38,.25); --shadow-hover:0 20px 50px rgba(12,24,38,.38);
+    --viewer:rgba(8,16,25,.93); --glass:rgba(39,58,80,.84);
+}
+
+[data-theme="lavender"] {
+    --bg:#211b2f; --bg-secondary:#644f7d; --container:#302544; --card:#3c2f51;
+    --text:#f4eff7; --muted:#c0b1cc; --accent:#c1a8dc; --accent-hover:#d2bce8;
+    --border:rgba(235,220,250,.15); --shadow:0 12px 40px rgba(25,15,38,.25); --shadow-hover:0 20px 50px rgba(25,15,38,.4);
+    --viewer:rgba(12,7,18,.93); --glass:rgba(48,37,68,.85);
+}
+
+[data-theme="rose"] {
+    --bg:#321f2a; --bg-secondary:#805267; --container:#442b38; --card:#553442;
+    --text:#f7eff1; --muted:#d0b4be; --accent:#d5a2b3; --accent-hover:#e4b9c7;
+    --border:rgba(250,225,235,.15); --shadow:0 12px 40px rgba(40,16,27,.24); --shadow-hover:0 20px 50px rgba(40,16,27,.4);
+    --viewer:rgba(18,7,12,.93); --glass:rgba(68,43,56,.85);
+}
+
+[data-theme="peach"] {
+    --bg:#382923; --bg-secondary:#896b5c; --container:#4a352d; --card:#5a4237;
+    --text:#faf1e9; --muted:#d1b9aa; --accent:#ddb69d; --accent-hover:#ecc8b1;
+    --border:rgba(250,230,215,.16); --shadow:0 12px 40px rgba(45,24,15,.24); --shadow-hover:0 20px 50px rgba(45,24,15,.4);
+    --viewer:rgba(18,10,7,.93); --glass:rgba(74,53,45,.85);
+}
+
+[data-theme="sage"] {
+    --bg:#1e3028; --bg-secondary:#527461; --container:#294337; --card:#355445;
+    --text:#eef5ef; --muted:#b3c8b9; --accent:#a8cfb0; --accent-hover:#bee0c4;
+    --border:rgba(220,245,225,.15); --shadow:0 12px 40px rgba(8,30,20,.24); --shadow-hover:0 20px 50px rgba(8,30,20,.4);
+    --viewer:rgba(5,15,9,.93); --glass:rgba(41,67,55,.85);
+}
+
+[data-theme="teal"] {
+    --bg:#183238; --bg-secondary:#39727a; --container:#21464d; --card:#2c5860;
+    --text:#edf7f7; --muted:#afd0d1; --accent:#9fd4d1; --accent-hover:#b8e2df;
+    --border:rgba(220,250,250,.15); --shadow:0 12px 40px rgba(5,35,39,.24); --shadow-hover:0 20px 50px rgba(5,35,39,.4);
+    --viewer:rgba(4,15,18,.93); --glass:rgba(33,70,77,.85);
+}
+
+[data-theme="blue"] {
+    --bg:#172b48; --bg-secondary:#3f6594; --container:#203b60; --card:#2b4b76;
+    --text:#eef4fb; --muted:#b1c4dc; --accent:#a6c6eb; --accent-hover:#bdd8f2;
+    --border:rgba(220,235,255,.15); --shadow:0 12px 40px rgba(5,20,45,.25); --shadow-hover:0 20px 50px rgba(5,20,45,.4);
+    --viewer:rgba(4,10,20,.93); --glass:rgba(32,59,96,.85);
+}
+
+[data-theme="plum"] {
+    --bg:#2d2038; --bg-secondary:#74527e; --container:#3e2b4d; --card:#4e3760;
+    --text:#f5eef8; --muted:#c8b3d0; --accent:#d0a9dc; --accent-hover:#dfbfe8;
+    --border:rgba(240,220,250,.15); --shadow:0 12px 40px rgba(30,12,40,.25); --shadow-hover:0 20px 50px rgba(30,12,40,.4);
+    --viewer:rgba(13,6,18,.93); --glass:rgba(62,43,77,.85);
+}
+
+[data-theme="aqua"] {
+    --bg:#173a42; --bg-secondary:#478b91; --container:#22515a; --card:#2d636c;
+    --text:#edf8f8; --muted:#b2d1d3; --accent:#a6dad6; --accent-hover:#bce7e3;
+    --border:rgba(220,250,250,.15); --shadow:0 12px 40px rgba(4,35,40,.24); --shadow-hover:0 20px 50px rgba(4,35,40,.4);
+    --viewer:rgba(3,14,17,.93); --glass:rgba(34,81,90,.85);
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    padding: 28px;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            var(--bg-secondary),
+            transparent 38%
+        ),
+        var(--bg);
+
+    color: var(--text);
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+
+button,
+select {
+    font-family: inherit;
+}
+
+
+header {
+
+    max-width: 1800px;
+
+    margin:
+        0 auto 28px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+.logo-area h1 {
+
+    margin: 0;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+}
+
+
+.logo-area p {
+
+    margin:
+        5px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+
+.header-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    justify-content: flex-end;
+}
+
+
+
+.age-toggle {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    height: 42px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 12px;
+
+    background:
+        var(--glass);
+
+    color:
+        var(--text);
+
+    cursor: pointer;
+
+    box-shadow:
+        var(--shadow);
+
+    transition:
+        transform 0.2s,
+        border-color 0.2s;
+}
+
+
+.age-toggle:hover {
+
+    transform:
+        translateY(-2px);
+}
+
+
+.age-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 25px;
+    height: 25px;
+
+    border-radius: 7px;
+
+    background: #e04452;
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.age-text {
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+.age-status {
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background:
+        #a5adb7;
+
+    transition:
+        background 0.2s;
+}
+
+
+.age-toggle.active {
+
+    border-color:
+        var(--accent);
+}
+
+
+.age-toggle.active
+.age-status {
+
+    background:
+        #43c86b;
+}
+
+
+
+.theme-selector {
+    display: flex; align-items: center; gap: 4px; padding: 5px;
+    border: 1px solid var(--border); border-radius: 11px;
+    background: var(--glass); backdrop-filter: blur(12px); box-shadow: var(--shadow);
+}
+
+.theme-button {
+    width: 30px; height: 30px; border: 0; border-radius: 6px;
+    cursor: pointer; transition: transform .2s, box-shadow .2s;
+}
+.theme-button:hover { transform: translateY(-2px) scale(1.08); }
+.theme-button.active { box-shadow: 0 0 0 2px var(--text), 0 2px 7px rgba(0,0,0,.2); }
+.theme-midnight { background:linear-gradient(135deg,#7188b5,#273550); }
+.theme-sky { background:linear-gradient(135deg,#a8cbe0,#45627e); }
+.theme-lavender { background:linear-gradient(135deg,#c3a9df,#604c78); }
+.theme-rose { background:linear-gradient(135deg,#d6a2b4,#805267); }
+.theme-peach { background:linear-gradient(135deg,#ddb59d,#896b5c); }
+.theme-sage { background:linear-gradient(135deg,#a9cfb0,#527461); }
+.theme-teal { background:linear-gradient(135deg,#9ed4d1,#39727a); }
+.theme-blue { background:linear-gradient(135deg,#a5c6eb,#3f6594); }
+.theme-plum { background:linear-gradient(135deg,#d0a9dc,#74527e); }
+.theme-aqua { background:linear-gradient(135deg,#a6dad6,#478b91); }
+
+
+.sort-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        6px 9px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 12px;
+
+    background:
+        var(--glass);
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+.sort-label {
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.sort-select {
+
+    height: 30px;
+
+    padding:
+        0 28px 0 9px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 8px;
+
+    background:
+        var(--container);
+
+    color:
+        var(--text);
+
+    outline: none;
+
+    cursor: pointer;
+
+    font-size: 11px;
+}
+
+
+
+.section {
+
+    max-width: 1800px;
+
+    margin:
+        0 auto 28px;
+
+    padding: 26px;
+
+    background:
+        var(--container);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+.section-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+
+.section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.section-title h2 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 650;
+}
+
+
+.section-count {
+
+    padding:
+        4px 9px;
+
+    border-radius: 20px;
+
+    background:
+        var(--bg-secondary);
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+
+.big-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+}
+
+.big-row {
+    display: flex;
+    width: 100%;
+    gap: 18px;
+    align-items: stretch;
+}
+
+.big-row .big-card {
+    flex: 0 0 auto;
+}
+
+
+.big-card {
+
+    position: relative;
+
+    height: 220px;
+
+    background: #111;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 0;
+
+    overflow: visible;
+
+    cursor: pointer;
+
+    box-shadow:
+        var(--shadow);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.big-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        var(--shadow-hover);
+}
+
+
+.big-card img {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.35s ease,
+        filter 0.3s ease;
+}
+
+
+.big-card:hover img {
+
+    transform:
+        scale(1.025);
+}
+
+
+
+.small-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(12, minmax(0,1fr));
+
+    gap: 12px;
+}
+
+
+.small-card {
+
+    position: relative;
+
+    aspect-ratio:
+        1 / 1;
+
+    background:
+        #111;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 0;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    box-shadow:
+        var(--shadow);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+
+.small-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        var(--shadow-hover);
+}
+
+
+.small-card img {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+
+.small-card:hover img {
+
+    transform:
+        scale(1.04);
+}
+
+
+
+.info {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    padding: 9px 12px;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    pointer-events: none;
+}
+
+.big-card:hover .info,
+.small-card:hover .info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.info .author {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.info .date {
+    font-size: 11px;
+    opacity: 0.75;
+    margin-top: 2px;
+}
+
+.info .size {
+    font-size: 11px;
+    opacity: 0.65;
+    margin-top: 2px;
+}
+
+
+.big-card:hover .info,
+.small-card:hover .info {
+
+    opacity: 1;
+
+    transform:
+        translateY(0);
+}
+
+
+.author {
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.date {
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    opacity: 0.78;
+}
+
+
+.size {
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    opacity: 0.65;
+}
+
+
+
+.nsfw img {
+
+    filter:
+        blur(25px);
+
+    transform:
+        scale(1.12);
+}
+
+
+.nsfw:hover img {
+
+    transform:
+        scale(1.14);
+}
+
+
+.nsfw-cover {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 10;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background:
+        rgba(0,0,0,0.38);
+
+    pointer-events: none;
+}
+
+
+.nsfw-label {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 52px;
+
+    height: 30px;
+
+    padding:
+        0 12px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(220,50,65,0.94);
+
+    color:
+        white;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.nsfw-hint {
+
+    padding:
+        5px 9px;
+
+    border-radius: 7px;
+
+    background:
+        rgba(0,0,0,0.55);
+
+    color:
+        rgba(255,255,255,0.9);
+
+    font-size: 10px;
+}
+
+
+
+.viewer {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 30px;
+
+    background:
+        var(--viewer);
+
+    backdrop-filter:
+        blur(12px);
+
+    opacity: 0;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity 0.25s ease;
+}
+
+
+.viewer.active {
+
+    opacity: 1;
+
+    pointer-events:
+        auto;
+}
+
+
+.viewer-content {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    max-width: 95vw;
+
+    max-height: 95vh;
+}
+
+
+.viewer-image-wrapper {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    max-width: 92vw;
+
+    max-height: 78vh;
+
+    border-radius: 0;
+
+    overflow: visible;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,0.45);
+
+    background:
+        #111;
+}
+
+
+.viewer-image {
+
+    display: block;
+
+    max-width: 92vw;
+
+    max-height: 78vh;
+
+    width: auto;
+
+    height: auto;
+
+    object-fit: contain;
+}
+
+
+.viewer-info {
+
+    width: 100%;
+
+    margin-top: 14px;
+
+    padding:
+        13px 18px;
+
+    border-radius: 12px;
+
+    background:
+        var(--glass);
+
+    backdrop-filter:
+        blur(15px);
+
+    color:
+        var(--text);
+
+    text-align: center;
+}
+
+
+.viewer-author {
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+
+.viewer-date {
+
+    margin-top: 4px;
+
+    font-size: 13px;
+
+    color:
+        var(--muted);
+}
+
+
+.viewer-size {
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    color:
+        var(--muted);
+}
+
+
+.viewer-close {
+
+    position: absolute;
+
+    top: -12px;
+
+    right: -12px;
+
+    z-index: 5;
+
+    width: 38px;
+
+    height: 38px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--container);
+
+    color:
+        var(--text);
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.3);
+}
+
+
+.viewer-close:hover {
+
+    background:
+        var(--accent);
+
+    color:
+        white;
+}
+
+
+.viewer-hint {
+
+    margin-top: 8px;
+
+    color:
+        rgba(255,255,255,0.6);
+
+    font-size: 11px;
+}
+
+
+
+.error {
+
+    width: 100%;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    background:
+        #ffe9e9;
+
+    border:
+        1px solid #ffbcbc;
+
+    color:
+        #a00000;
+}
+
+
+
+.selection-box {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.selection-button {
+    height: 42px;
+    padding: 0 13px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--glass);
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    font-size: 12px;
+    font-weight: 650;
+    transition: transform .2s, border-color .2s, background .2s;
+}
+
+.selection-button:hover {
+    transform: translateY(-2px);
+}
+
+.selection-button.active {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, var(--glass));
+}
+
+.selection-copy {
+    display: none;
+    height: 42px;
+    padding: 0 13px;
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.selection-copy.visible {
+    display: block;
+}
+
+.big-grid.selection-mode .big-card,
+.small-grid.selection-mode .small-card {
+    transition: box-shadow .2s ease, opacity .2s ease;
+}
+
+.big-card.selected,
+.small-card.selected {
+    box-shadow:
+        0 0 0 5px var(--accent),
+        0 0 18px 6px color-mix(in srgb, var(--accent) 65%, transparent),
+        0 0 36px 10px color-mix(in srgb, var(--accent) 28%, transparent);
+    z-index: 30;
+}
+
+@media (max-width: 768px) {
+    .selection-box { flex-wrap: wrap; justify-content: flex-end; }
+    .selection-button, .selection-copy { height: 38px; }
+}
+
+
+
+.site-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.map-logo {
+    width: 28px;
+    height: 34px;
+    flex: 0 0 28px;
+    display: block;
+    object-fit: contain;
+}
+
+.info-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.info-button {
+    min-height: 34px;
+    padding: 0 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--glass);
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 650;
+    box-shadow: var(--shadow);
+    transition: transform .2s, border-color .2s, background .2s;
+}
+
+.info-button:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
+
+.info-button:disabled { opacity: .55; cursor: not-allowed; }
+
+.info-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0,0,0,.48);
+    backdrop-filter: blur(5px);
+}
+
+.info-modal.active { display: flex; }
+
+.info-modal-content {
+    width: min(560px, 94vw);
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--container);
+    color: var(--text);
+    box-shadow: 0 25px 70px rgba(0,0,0,.35);
+}
+
+.info-modal-content h3 { margin: 0 0 12px; font-size: 20px; }
+.info-modal-content p { margin: 8px 0; color: var(--muted); line-height: 1.55; }
+.info-modal-close {
+    float: right;
+    width: 30px; height: 30px;
+    border: 0; border-radius: 8px;
+    background: var(--glass); color: var(--text);
+    cursor: pointer; font-size: 20px;
+}
+
+
+@media (max-width: 1200px) {
+
+    .small-grid {
+
+        grid-template-columns:
+            repeat(8,minmax(0,1fr));
+
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    body {
+
+        padding: 14px;
+
+    }
+
+
+    header {
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .logo-area h1 {
+
+        font-size:
+            22px;
+
+    }
+
+
+    .header-controls {
+
+        flex-direction:
+            column-reverse;
+
+        align-items:
+            flex-end;
+
+    }
+
+
+    .theme-selector {
+
+        gap:
+            2px;
+
+    }
+
+
+    .theme-button {
+
+        width:
+            28px;
+
+        height:
+            28px;
+
+    }
+
+
+    .age-toggle {
+
+        height:
+            38px;
+
+    }
+
+
+    .sort-box {
+
+        max-width:
+            100%;
+
+    }
+
+
+    .section {
+
+        padding:
+            17px;
+
+        border-radius:
+            15px;
+
+    }
+
+
+    .small-grid {
+
+        grid-template-columns:
+            repeat(4,minmax(0,1fr));
+
+        gap:
+            8px;
+
+    }
+
+
+    .big-card {
+
+        height:
+            180px;
+
+    }
+
+
+    .viewer {
+
+        padding:
+            15px;
+
+    }
+
+
+    .viewer-image {
+
+        max-width:
+            96vw;
+
+        max-height:
+            72vh;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .small-grid {
+
+        grid-template-columns:
+            repeat(3,minmax(0,1fr));
+
+    }
+
+
+    .sort-label {
+
+        display:
+            none;
+
+    }
+
+}
+
+
+.viewer-image-wrapper { overflow: auto; width: 94vw; max-width: 1400px; max-height: 78vh; padding: 6px; }
+.viewer-image { display: block; max-width: none; max-height: none; width: auto; height: auto; }
+.viewer-zoom { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:10px; }
+.viewer-zoom button { min-width:44px; height:32px; padding:0 9px; border:1px solid var(--border); border-radius:8px; background:var(--glass); color:var(--text); cursor:pointer; font-size:11px; font-weight:650; }
+.viewer-zoom button:hover, .viewer-zoom button.active { border-color:var(--accent); background:color-mix(in srgb,var(--accent) 18%,var(--glass)); }
+.viewer-zoom-value { min-width:48px; text-align:center; color:var(--muted); font-size:11px; }
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header>
+
+
+    <div class="logo-area">
+
+        <h1 class="site-title">
+            <img class="map-logo" src="favicon.png" alt="">
+            <span>Галерея мап-арта — 2b2t.org.ru</span>
+        </h1>
+
+
+    </div>
+
+
+    <div class="header-controls">
+
+        <div class="info-actions">
+            <button class="info-button" id="guideButton" type="button">Как пользоваться</button>
+            <a class="info-button" id="discordButton" href="https://discord.gg/WtbDHWTtYU" target="_blank" rel="noopener">Discord мап-артов</a>
+            <button class="info-button" id="sourceButton" type="button">Об источнике данных</button>
+        </div>
+
+
+        <!-- Сортировка -->
+
+        <div class="sort-box">
+
+            <span class="sort-label">
+                Сортировка
+            </span>
+
+            <select
+                class="sort-select"
+                id="sortSelect">
+
+                <option value="date-desc">
+                    Новые → старые
+                </option>
+
+                <option value="date-asc">
+                    Старые → новые
+                </option>
+
+                <option value="size-desc">
+                    Большие → маленькие
+                </option>
+
+                <option value="size-asc">
+                    Маленькие → большие
+                </option>
+
+                <option value="selected">
+                    Только выбранные
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- 18+ -->
+
+        <button
+            class="age-toggle"
+            id="ageToggle">
+
+            <span class="age-icon">
+                18+
+            </span>
+
+            <span class="age-text">
+                Мне есть 18+
+            </span>
+
+            <span class="age-status"></span>
+
+        </button>
+
+
+        <!-- Выбор мап-артов -->
+
+        <div class="selection-box">
+
+            <button class="selection-button" id="selectionToggle">
+                Выбрать арты
+            </button>
+
+            <button class="selection-copy" id="selectionCopy">
+                Копировать ссылку <span id="selectionCount">0</span>
+            </button>
+
+        </div>
+
+
+        <!-- Темы -->
+
+        <div class="theme-selector">
+
+            <button class="theme-button theme-midnight" data-theme="midnight" title="Midnight"></button>
+            <button class="theme-button theme-sky" data-theme="sky" title="Sky"></button>
+            <button class="theme-button theme-lavender" data-theme="lavender" title="Lavender"></button>
+            <button class="theme-button theme-rose" data-theme="rose" title="Rose"></button>
+            <button class="theme-button theme-peach" data-theme="peach" title="Peach"></button>
+            <button class="theme-button theme-sage" data-theme="sage" title="Sage"></button>
+            <button class="theme-button theme-teal" data-theme="teal" title="Teal"></button>
+            <button class="theme-button theme-blue" data-theme="blue" title="Blue"></button>
+            <button class="theme-button theme-plum" data-theme="plum" title="Plum"></button>
+            <button class="theme-button theme-aqua" data-theme="aqua" title="Aqua"></button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     BIG MAPS
+     ========================================================= -->
+
+<section class="section">
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            <h2>
+                Крупные мап-арты
+            </h2>
+
+            <span
+                class="section-count"
+                id="bigCount">
+                0
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="big-grid"
+        id="bigMaps">
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SMALL MAPS
+     ========================================================= -->
+
+<section class="section">
+
+    <div class="section-header">
+
+        <div class="section-title">
+
+            <h2>
+                Карты 1×1
+            </h2>
+
+            <span
+                class="section-count"
+                id="smallCount">
+                0
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="small-grid"
+        id="smallMaps">
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     INFO MODALS
+     ========================================================= -->
+
+<div class="info-modal" id="guideModal">
+    <div class="info-modal-content">
+        <button class="info-modal-close" data-close="guideModal">×</button>
+        <h3>Как отправить другу выбранные карты</h3>
+        <p>1. Нажми «Выбрать арты».</p>
+        <p>2. Кликни по нужным большим или маленьким мап-артам. Вокруг выбранных появится светящаяся рамка 5 px.</p>
+        <p>3. Нажми «Копировать ссылку» и отправь её другу.</p>
+        <p>4. При открытии ссылки сайт автоматически восстановит выбранные карты.</p>
+        <p>После этого можно выбрать сортировку «Только выбранные», чтобы оставить на экране только этот набор.</p>
+    </div>
+</div>
+
+<div class="info-modal" id="sourceModal">
+    <div class="info-modal-content">
+        <button class="info-modal-close" data-close="sourceModal">×</button>
+        <h3>Об источнике данных</h3>
+        <p>Информация об авторах и датах создания мап-артов взята из Discord-канала мап-артов.</p>
+        <p>Если вы заметили неточность в авторе или дате, данные можно уточнить через этот канал.</p>
+    </div>
+</div>
+
+
+<!-- =========================================================
+     VIEWER
+     ========================================================= -->
+
+<div
+    class="viewer"
+    id="viewer">
+
+
+    <div class="viewer-content">
+
+
+        <button
+            class="viewer-close"
+            id="viewerClose">
+
+            ×
+
+        </button>
+
+
+        <div class="viewer-image-wrapper">
+
+            <img
+                class="viewer-image"
+                id="viewerImage"
+                src=""
+                alt="Мап-арт">
+
+        </div>
+
+
+        <div class="viewer-zoom" aria-label="Масштаб">
+            <button type="button" data-zoom="100">100%</button>
+            <button type="button" data-zoom="200">200%</button>
+            <button type="button" data-zoom="300">300%</button>
+            <span class="viewer-zoom-value" id="viewerZoomValue">100%</span>
+        </div>
+
+
+        <div class="viewer-info">
+
+            <div
+                class="viewer-author"
+                id="viewerAuthor">
+            </div>
+
+            <div
+                class="viewer-date"
+                id="viewerDate">
+            </div>
+
+            <div
+                class="viewer-size"
+                id="viewerSize">
+            </div>
+
+        </div>
+
+
+        <div class="viewer-hint">
+
+            ESC — закрыть
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const bigMapsGrid =
+    document.getElementById(
+        "bigMaps"
+    );
+
+
+const smallMapsGrid =
+    document.getElementById(
+        "smallMaps"
+    );
+
+
+const bigCount =
+    document.getElementById(
+        "bigCount"
+    );
+
+
+const smallCount =
+    document.getElementById(
+        "smallCount"
+    );
+
+
+const sortSelect =
+    document.getElementById(
+        "sortSelect"
+    );
+
+
+const ageToggle =
+    document.getElementById(
+        "ageToggle"
+    );
+
+
+const selectionToggle =
+    document.getElementById(
+        "selectionToggle"
+    );
+
+
+const selectionCopy =
+    document.getElementById(
+        "selectionCopy"
+    );
+
+
+const selectionCount =
+    document.getElementById(
+        "selectionCount"
+    );
+
+
+const viewer =
+    document.getElementById(
+        "viewer"
+    );
+
+
+const viewerImage =
+    document.getElementById(
+        "viewerImage"
+    );
+
+
+const viewerAuthor =
+    document.getElementById(
+        "viewerAuthor"
+    );
+
+
+const viewerDate =
+    document.getElementById(
+        "viewerDate"
+    );
+
+
+const viewerSize =
+    document.getElementById(
+        "viewerSize"
+    );
+
+
+const viewerClose =
+    document.getElementById(
+        "viewerClose"
+    );
+
+const viewerZoomValue = document.getElementById("viewerZoomValue");
+const viewerZoomButtons = document.querySelectorAll("[data-zoom]");
+const viewerImageWrapper = document.querySelector(".viewer-image-wrapper");
+let viewerZoom = 100;
+
+function applyViewerZoom() {
+    if (!viewerImage.naturalWidth || !viewerImage.naturalHeight) return;
+    const maxWidth = Math.min(window.innerWidth * 0.92, 1400);
+    const maxHeight = window.innerHeight * 0.78;
+    const imageRatio = viewerImage.naturalWidth / viewerImage.naturalHeight;
+
+    let baseWidth = maxWidth;
+    let baseHeight = baseWidth / imageRatio;
+
+    if (baseHeight > maxHeight) {
+        baseHeight = maxHeight;
+        baseWidth = baseHeight * imageRatio;
+    }
+
+    viewerImage.style.maxWidth = "none";
+    viewerImage.style.maxHeight = "none";
+    viewerImage.style.width = (baseWidth * viewerZoom / 100) + "px";
+    viewerImage.style.height = (baseHeight * viewerZoom / 100) + "px";
+}
+
+function setViewerZoom(value) {
+    viewerZoom = Number(value);
+    applyViewerZoom();
+    viewerZoomValue.textContent = viewerZoom + "%";
+    viewerZoomButtons.forEach(function(button) {
+        button.classList.toggle("active", Number(button.dataset.zoom) === viewerZoom);
+    });
+}
+
+viewerImage.addEventListener("load", function() {
+    applyViewerZoom();
+});
+
+viewerZoomButtons.forEach(function(button) {
+    button.addEventListener("click", function(event) {
+        event.stopPropagation();
+        setViewerZoom(button.dataset.zoom);
+    });
+});
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let allData = {
+
+    bigMaps: [],
+
+    smallMaps: []
+
+};
+
+
+let adultsAllowed =
+    localStorage.getItem(
+        "adultsAllowed"
+    ) === "true";
+
+
+let currentSort =
+    localStorage.getItem(
+        "gallery-sort"
+    ) || "date-desc";
+
+
+let selectionMode = false;
+
+let selectedIds = new Set();
+
+function selectionKey(map, big) {
+    return (big ? "b:" : "s:") + String(map.id);
+}
+
+function readSelectionFromUrl() {
+    const raw = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("maps");
+    if (!raw) return;
+    raw.split(",").map(function(item) { return decodeURIComponent(item); }).filter(Boolean).forEach(function(item) {
+        selectedIds.add(item.indexOf(":") === -1 ? "b:" + item : item);
+    });
+}
+
+function updateSelectionUI() {
+    bigMapsGrid.classList.toggle("selection-mode", selectionMode);
+    smallMapsGrid.classList.toggle("selection-mode", selectionMode);
+    selectionToggle.classList.toggle("active", selectionMode);
+    selectionToggle.textContent = selectionMode ? "Готово" : "Выбрать арты";
+    selectionCount.textContent = selectedIds.size;
+    selectionCopy.classList.toggle("visible", selectionMode && selectedIds.size > 0);
+}
+
+function updateSelectedCards() {
+    document.querySelectorAll(".big-card[data-map-id], .small-card[data-map-id]").forEach(function(card) {
+        const key = (card.dataset.mapType === "small" ? "s:" : "b:") + card.dataset.mapId;
+        card.classList.toggle("selected", selectedIds.has(key));
+    });
+}
+
+function toggleSelected(map, big) {
+    const key = selectionKey(map, big);
+    if (selectedIds.has(key)) selectedIds.delete(key);
+    else selectedIds.add(key);
+    updateSelectionUI();
+    updateSelectedCards();
+}
+
+function copySelectionLink() {
+    const ids = Array.from(selectedIds).map(function(id) { return encodeURIComponent(id); });
+    const url = window.location.origin + window.location.pathname + "#maps=" + ids.join(",");
+    navigator.clipboard.writeText(url).then(function() {
+        const oldText = selectionCopy.innerHTML;
+        selectionCopy.textContent = "Ссылка скопирована ✓";
+        setTimeout(function() { selectionCopy.innerHTML = oldText; }, 1500);
+    });
+}
+
+selectionToggle.addEventListener("click", function() {
+    selectionMode = !selectionMode;
+    updateSelectionUI();
+    updateSelectedCards();
+});
+
+selectionCopy.addEventListener("click", copySelectionLink);
+
+readSelectionFromUrl();
+
+
+/* =========================================================
+   DATE FORMAT
+   ========================================================= */
+
+function formatDate(date) {
+
+    if (!date) {
+
+        return "Дата не указана";
+
+    }
+
+
+    const parts =
+        date.split("-");
+
+
+    if (parts.length !== 2) {
+
+        return date;
+
+    }
+
+
+    const year =
+        parseInt(
+            parts[0]
+        );
+
+
+    const month =
+        parseInt(
+            parts[1]
+        );
+
+
+    const months = [
+
+        "Январь",
+        "Февраль",
+        "Март",
+        "Апрель",
+        "Май",
+        "Июнь",
+        "Июль",
+        "Август",
+        "Сентябрь",
+        "Октябрь",
+        "Ноябрь",
+        "Декабрь"
+
+    ];
+
+
+    if (
+        month < 1 ||
+        month > 12
+    ) {
+
+        return date;
+
+    }
+
+
+    return (
+        months[month - 1] +
+        " " +
+        year
+    );
+
+}
+
+
+/* =========================================================
+   SIZE
+   ========================================================= */
+
+function getRatio(map) {
+
+    if (map.ratio) {
+
+        const parts = String(map.ratio)
+            .replace("×", "/")
+            .replace("x", "/")
+            .split("/")
+            .map(function(value) {
+                return parseFloat(value.trim());
+            });
+
+        if (parts.length === 2 && parts[0] > 0 && parts[1] > 0) {
+            return {
+                width: parts[0],
+                height: parts[1]
+            };
+        }
+    }
+
+    return {
+        width: Number(map.width) || 1,
+        height: Number(map.height) || 1
+    };
+
+}
+
+
+function getWidth(map) {
+
+    return getRatio(map).width;
+
+}
+
+
+function getHeight(map) {
+
+    return getRatio(map).height;
+
+}
+
+
+function getArea(map) {
+
+    return (
+        getWidth(map) *
+        getHeight(map)
+    );
+
+}
+
+
+function getSizeText(map) {
+
+    return (
+        getWidth(map) +
+        "×" +
+        getHeight(map)
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text || "";
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   SORT
+   ========================================================= */
+
+function sortMaps(maps) {
+
+    const result =
+        [...maps];
+
+
+    if (
+        currentSort ===
+        "date-desc"
+    ) {
+
+        result.sort(
+            function(a, b) {
+
+                return (
+                    (b.date || "")
+                    .localeCompare(
+                        a.date || ""
+                    )
+                );
+
+            }
+        );
+
+    }
+
+
+    else if (
+        currentSort ===
+        "date-asc"
+    ) {
+
+        result.sort(
+            function(a, b) {
+
+                return (
+                    (a.date || "")
+                    .localeCompare(
+                        b.date || ""
+                    )
+                );
+
+            }
+        );
+
+    }
+
+
+    else if (
+        currentSort ===
+        "size-desc"
+    ) {
+
+        result.sort(
+            function(a, b) {
+
+                return (
+                    getArea(b) -
+                    getArea(a)
+                );
+
+            }
+        );
+
+    }
+
+
+    else if (
+        currentSort ===
+        "size-asc"
+    ) {
+
+        result.sort(
+            function(a, b) {
+
+                return (
+                    getArea(a) -
+                    getArea(b)
+                );
+
+            }
+        );
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   AGE MODE
+   ========================================================= */
+
+function updateAgeMode() {
+
+    ageToggle.classList.toggle(
+        "active",
+        adultsAllowed
+    );
+
+
+    document
+        .querySelectorAll(
+            ".nsfw"
+        )
+        .forEach(
+            function(card) {
+
+                if (
+                    adultsAllowed
+                ) {
+
+                    card.classList.remove(
+                        "nsfw"
+                    );
+
+
+                    const cover =
+                        card.querySelector(
+                            ".nsfw-cover"
+                        );
+
+
+                    if (cover) {
+
+                        cover.remove();
+
+                    }
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   AGE BUTTON
+   ========================================================= */
+
+ageToggle.addEventListener(
+    "click",
+    function() {
+
+        adultsAllowed =
+            !adultsAllowed;
+
+
+        localStorage.setItem(
+            "adultsAllowed",
+            adultsAllowed
+        );
+
+
+        render();
+
+    }
+);
+
+
+/* =========================================================
+   CREATE CARD
+   ========================================================= */
+
+function createCard(
+    map,
+    big
+) {
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+
+    card.className =
+        big
+        ? "big-card"
+        : "small-card";
+
+    card.dataset.mapId = String(map.id);
+    card.dataset.mapType = big ? "big" : "small";
+
+
+
+
+    /* -----------------------------------------------------
+       Путь к картинке
+       ----------------------------------------------------- */
+
+    const imageSrc =
+        map.image ||
+        "";
+
+
+    /* -----------------------------------------------------
+       IMAGE
+       ----------------------------------------------------- */
+
+    const image =
+        document.createElement(
+            "img"
+        );
+
+
+    image.src =
+        imageSrc;
+
+
+    image.alt =
+        "Мап-арт";
+
+
+    image.onerror =
+        function() {
+
+            this.style.background =
+                "#252525";
+
+        };
+
+
+    card.appendChild(
+        image
+    );
+
+
+    /* -----------------------------------------------------
+       NSFW
+       ----------------------------------------------------- */
+
+    if (
+        map.nsfw &&
+        !adultsAllowed
+    ) {
+
+        card.classList.add(
+            "nsfw"
+        );
+
+
+        const cover =
+            document.createElement(
+                "div"
+            );
+
+
+        cover.className =
+            "nsfw-cover";
+
+
+        cover.innerHTML =
+
+            "<div class='nsfw-label'>" +
+                "18+" +
+            "</div>" +
+
+            "<div class='nsfw-hint'>" +
+                "Контент скрыт" +
+            "</div>";
+
+
+        card.appendChild(
+            cover
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       INFO
+       ----------------------------------------------------- */
+
+    const info =
+        document.createElement(
+            "div"
+        );
+
+
+    info.className =
+        "info";
+
+
+    info.innerHTML =
+
+        "<div class='author'>" +
+
+        escapeHtml(
+            map.author ||
+            "Неизвестный автор"
+        ) +
+
+        "</div>" +
+
+        "<div class='date'>" +
+
+        escapeHtml(
+            formatDate(
+                map.date
+            )
+        ) +
+
+        "</div>" +
+
+        "<div class='size'>" +
+
+        escapeHtml(
+            getSizeText(map)
+        ) +
+
+        "</div>";
+
+
+    card.appendChild(
+        info
+    );
+
+
+    /* -----------------------------------------------------
+       CLICK
+       ----------------------------------------------------- */
+
+    card.addEventListener(
+        "click",
+        function() {
+
+            if (selectionMode) {
+                if (map.nsfw && !adultsAllowed) return;
+                toggleSelected(map, big);
+                return;
+            }
+
+            if (
+                map.nsfw &&
+                !adultsAllowed
+            ) {
+
+                return;
+
+            }
+
+
+            openViewer(
+                map,
+                imageSrc
+            );
+
+        }
+    );
+
+
+    return card;
+
+}
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function renderBigMaps(maps) {
+
+    bigMapsGrid.innerHTML = "";
+
+    if (!maps.length) return;
+
+    const gap = 18;
+    const targetHeight = 220;
+    const containerWidth = bigMapsGrid.clientWidth;
+
+    let row = [];
+    let ratioSum = 0;
+
+    function appendRow(items, isLast) {
+
+        if (!items.length) return;
+
+        const rowEl = document.createElement("div");
+        rowEl.className = "big-row";
+
+        const totalGap = gap * (items.length - 1);
+        let rowHeight;
+
+        if (isLast) {
+            rowHeight = targetHeight;
+        } else {
+            rowHeight = (containerWidth - totalGap) / items.reduce(function(sum, map) {
+                return sum + (getWidth(map) / getHeight(map));
+            }, 0);
+
+            rowHeight = Math.max(150, Math.min(targetHeight, rowHeight));
+        }
+
+        items.forEach(function(map) {
+            const card = createCard(map, true);
+            const ratio = getWidth(map) / getHeight(map);
+            card.style.height = rowHeight + "px";
+            card.style.width = (rowHeight * ratio) + "px";
+            rowEl.appendChild(card);
+        });
+
+        bigMapsGrid.appendChild(rowEl);
+    }
+
+    maps.forEach(function(map) {
+        const ratio = getWidth(map) / getHeight(map);
+        row.push(map);
+        ratioSum += ratio;
+
+        const naturalWidth = ratioSum * targetHeight + gap * (row.length - 1);
+
+        if (naturalWidth >= containerWidth) {
+            appendRow(row, false);
+            row = [];
+            ratioSum = 0;
+        }
+    });
+
+    if (row.length) {
+        appendRow(row, true);
+    }
+}
+
+
+function render() {
+
+    smallMapsGrid.innerHTML = "";
+
+    const sortedBig = sortMaps(allData.bigMaps);
+    const sortedSmall = sortMaps(allData.smallMaps);
+
+    const visibleBig = currentSort === "selected"
+        ? sortedBig.filter(function(map) { return selectedIds.has(selectionKey(map, true)); })
+        : sortedBig;
+
+    const visibleSmall = currentSort === "selected"
+        ? sortedSmall.filter(function(map) { return selectedIds.has(selectionKey(map, false)); })
+        : sortedSmall;
+
+    bigCount.textContent = visibleBig.length;
+    smallCount.textContent = visibleSmall.length;
+
+    renderBigMaps(visibleBig);
+
+    visibleSmall.forEach(function(map) {
+        smallMapsGrid.appendChild(createCard(map, false));
+    });
+
+    updateAgeMode();
+    updateSelectionUI();
+    updateSelectedCards();
+}
+
+
+
+/* =========================================================
+   LOAD DATA
+   ========================================================= */
+
+async function loadData() {
+
+    try {
+
+        const response =
+            await fetch(
+                "data.json?cache=" +
+                Date.now()
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        allData.bigMaps =
+            Array.isArray(
+                data.bigMaps
+            )
+            ? data.bigMaps
+            : [];
+
+
+        allData.smallMaps =
+            Array.isArray(
+                data.smallMaps
+            )
+            ? data.smallMaps
+            : [];
+
+
+        render();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        bigMapsGrid.innerHTML =
+
+            "<div class='error'>" +
+
+            "Не удалось загрузить data.json.<br><br>" +
+
+            escapeHtml(
+                error.message
+            ) +
+
+            "</div>";
+
+    }
+
+}
+
+
+/* =========================================================
+   SORT CHANGE
+   ========================================================= */
+
+sortSelect.value =
+    currentSort;
+
+
+sortSelect.addEventListener(
+    "change",
+    function() {
+
+        currentSort =
+            sortSelect.value;
+
+
+        localStorage.setItem(
+            "gallery-sort",
+            currentSort
+        );
+
+
+        render();
+
+    }
+);
+
+
+/* =========================================================
+   VIEWER
+   ========================================================= */
+
+function openViewer(
+    map,
+    imageSrc
+) {
+
+    viewerImage.src =
+        imageSrc;
+
+    setViewerZoom(100);
+
+
+    viewerAuthor.textContent =
+        map.author ||
+        "Неизвестный автор";
+
+
+    viewerDate.textContent =
+        formatDate(
+            map.date
+        );
+
+
+    viewerSize.textContent =
+        "Размер: " +
+        getSizeText(map);
+
+
+    viewer.classList.add(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function closeViewer() {
+
+    viewer.classList.remove(
+        "active"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+viewerClose.addEventListener(
+    "click",
+    closeViewer
+);
+
+
+viewer.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === viewer
+        ) {
+
+            closeViewer();
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeViewer();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   THEMES
+   ========================================================= */
+
+const themeButtons =
+    document.querySelectorAll(
+        ".theme-button"
+    );
+
+
+function setTheme(theme) {
+
+    if (
+        theme === "light"
+    ) {
+
+        document.documentElement
+            .removeAttribute(
+                "data-theme"
+            );
+
+    }
+
+    else {
+
+        document.documentElement
+            .setAttribute(
+                "data-theme",
+                theme
+            );
+
+    }
+
+
+    localStorage.setItem(
+        "gallery-theme",
+        theme
+    );
+
+
+    themeButtons.forEach(
+        function(button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.theme ===
+                theme
+            );
+
+        }
+    );
+
+}
+
+
+/*
+ * По умолчанию Midnight.
+ */
+
+const savedTheme =
+    localStorage.getItem(
+        "gallery-theme"
+    ) || "midnight";
+
+
+setTheme(
+    savedTheme
+);
+
+
+/* ---------------------------------------------------------
+   THEME BUTTONS
+   --------------------------------------------------------- */
+
+themeButtons.forEach(
+    function(button) {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                setTheme(
+                    button.dataset.theme
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SORT DEFAULT
+   ========================================================= */
+
+sortSelect.value =
+    currentSort;
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+let resizeTimer;
+
+window.addEventListener("resize", function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+        if (allData.bigMaps.length) {
+            renderBigMaps(sortMaps(allData.bigMaps));
+            updateAgeMode();
+        }
+    }, 120);
+});
+
+
+/* =========================================================
+   INFO BUTTONS / MODALS
+   ========================================================= */
+
+const DISCORD_URL = "https://discord.gg/WtbDHWTtYU";
+const discordButton = document.getElementById("discordButton");
+if (DISCORD_URL !== "#") discordButton.href = DISCORD_URL;
+else discordButton.addEventListener("click", function(event) { event.preventDefault(); alert("Укажи ссылку на Discord-канал в переменной DISCORD_URL в index.html."); });
+
+document.getElementById("guideButton").addEventListener("click", function() { document.getElementById("guideModal").classList.add("active"); });
+document.getElementById("sourceButton").addEventListener("click", function() { document.getElementById("sourceModal").classList.add("active"); });
+document.querySelectorAll("[data-close]").forEach(function(button) {
+    button.addEventListener("click", function() { document.getElementById(button.dataset.close).classList.remove("active"); });
+});
+document.querySelectorAll(".info-modal").forEach(function(modal) {
+    modal.addEventListener("click", function(event) { if (event.target === modal) modal.classList.remove("active"); });
+});
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+loadData();
+
+
+</script>
+
+</body>
+
+</html>
