@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Галерея мап-арта — 2b2t.org.ru</title>
+<title>Галерея мап-арта · 2b2t.org.ru</title>
 
 
 <style>
@@ -302,6 +302,48 @@ header {
     background: var(--glass); backdrop-filter: blur(12px); box-shadow: var(--shadow);
 }
 
+/* ---------- Выбор оформления (выпадающий) ---------- */
+.theme-picker { position: relative; }
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--glass);
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform .2s, border-color .2s, background .2s;
+}
+.theme-toggle:hover { transform: translateY(-2px); }
+.theme-picker.open .theme-toggle {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, var(--glass));
+}
+.theme-toggle svg { width: 20px; height: 20px; flex: none; }
+.theme-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--text) 35%, transparent);
+}
+.theme-picker .theme-selector {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 60;
+    display: none;
+    grid-template-columns: repeat(5, 30px);
+    gap: 6px;
+    padding: 9px;
+    border-radius: 12px;
+    background: var(--container);
+}
+.theme-picker.open .theme-selector { display: grid; }
+
 .theme-button {
     width: 30px; height: 30px; border: 0; border-radius: 6px;
     cursor: pointer; transition: transform .2s, box-shadow .2s;
@@ -481,7 +523,7 @@ header {
 
     height: 220px;
 
-    background: #111;
+    background: var(--bg-secondary);
 
     border:
         1px solid var(--border);
@@ -520,6 +562,8 @@ header {
 
     object-fit: contain;
 
+    image-rendering: auto;
+
     transition:
         transform 0.35s ease,
         filter 0.3s ease;
@@ -553,7 +597,7 @@ header {
         1 / 1;
 
     background:
-        #111;
+        var(--bg-secondary);
 
     border:
         1px solid var(--border);
@@ -852,7 +896,7 @@ header {
         0 25px 80px rgba(0,0,0,0.45);
 
     background:
-        #111;
+        transparent;
 }
 
 
@@ -923,49 +967,6 @@ header {
 
     color:
         var(--muted);
-}
-
-
-.viewer-close {
-
-    position: absolute;
-
-    top: -12px;
-
-    right: -12px;
-
-    z-index: 5;
-
-    width: 38px;
-
-    height: 38px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background:
-        var(--container);
-
-    color:
-        var(--text);
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 5px 20px rgba(0,0,0,0.3);
-}
-
-
-.viewer-close:hover {
-
-    background:
-        var(--accent);
-
-    color:
-        white;
 }
 
 
@@ -1076,11 +1077,190 @@ header {
 }
 
 .map-logo {
-    width: 28px;
-    height: 34px;
-    flex: 0 0 28px;
+    width: 40px;
+    height: auto;
+    flex: 0 0 40px;
     display: block;
-    object-fit: contain;
+    overflow: visible;
+    --logo-hi:   color-mix(in srgb, var(--accent) 45%, white);
+    --logo-base: var(--accent);
+    --logo-mid:  color-mix(in srgb, var(--accent) 78%, black);
+    --logo-edge: color-mix(in srgb, var(--accent) 42%, black);
+    --logo-ink1: color-mix(in srgb, var(--accent) 38%, black);
+    --logo-ink2: color-mix(in srgb, var(--accent) 24%, black);
+    --logo-ink3: color-mix(in srgb, var(--accent) 14%, black);
+}
+.map-logo .l1 { fill: var(--logo-hi); }
+.map-logo .l2 { fill: var(--logo-base); }
+.map-logo .l3 { fill: var(--logo-mid); }
+.map-logo .ed { fill: var(--logo-edge); }
+.map-logo .m1 { fill: var(--logo-ink1); }
+.map-logo .m2 { fill: var(--logo-ink2); }
+.map-logo .m3 { fill: var(--logo-ink3); }
+
+.logo-area { flex: 0 0 auto; }
+.site-title-text { display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap; }
+.header-controls { flex: 1 1 0; min-width: 0; }
+.site-title-text small {
+    margin-top: 3px;
+    font-size: 0.6em;
+    font-weight: 600;
+    letter-spacing: .4px;
+    color: var(--muted);
+}
+
+/* ---------- Топ авторов ---------- */
+.authors-content { display: flex; flex-direction: column; max-height: 86vh; }
+.authors-content h3 { margin-bottom: 4px; }
+.authors-sub { margin: 0 0 14px; font-size: 12px; }
+.authors-list { margin: 0; padding: 0; list-style: none; overflow-y: auto; padding-right: 4px; }
+.authors-row {
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    align-items: center;
+    column-gap: 10px;
+    padding: 7px 0;
+}
+.authors-rank { text-align: center; font-weight: 700; color: var(--muted); font-size: 13px; }
+.authors-row.top .authors-rank { color: var(--accent); font-size: 15px; }
+.authors-name { font-weight: 650; font-size: 14px; overflow-wrap: anywhere; }
+.authors-count { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.authors-bar {
+    grid-column: 2 / 4;
+    height: 5px;
+    margin-top: 5px;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    overflow: hidden;
+}
+.authors-bar i { display: block; height: 100%; border-radius: 99px; background: var(--accent); }
+.authors-more {
+    margin-top: 12px;
+    min-height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--glass);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.authors-more:hover { border-color: var(--accent); }
+
+/* ---------- Ссылки "Полезное" ---------- */
+.link-card {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--glass);
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .2s, border-color .2s, background .2s;
+}
+.link-card:hover { transform: translateY(-2px); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--glass)); }
+.link-card-title { font-weight: 700; font-size: 14px; }
+.link-card-text { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.link-card.disabled { opacity: .6; cursor: default; pointer-events: none; }
+.link-soon {
+    margin-left: 6px; padding: 2px 8px;
+    border-radius: 99px; font-style: normal; font-size: 10px; font-weight: 700;
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* ---------- Панель фильтров ---------- */
+.filters-bar {
+    max-width: 1800px;
+    margin: -10px auto 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+.filters-spacer { flex: 1 1 auto; }
+.filter-field {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 9px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--glass);
+    box-shadow: var(--shadow);
+    color: var(--muted);
+    font-size: 11px; font-weight: 600;
+}
+.filter-field select {
+    height: 28px; padding: 0 24px 0 8px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--container); color: var(--text);
+    font-size: 11px; cursor: pointer; outline: none;
+}
+.filter-field.active { border-color: var(--accent); }
+.filter-chip, .filter-reset {
+    height: 34px; padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    background: color-mix(in srgb, var(--accent) 20%, var(--glass));
+    color: var(--text); font: inherit; font-size: 12px; cursor: pointer;
+}
+.filter-reset { border-color: var(--border); background: var(--glass); color: var(--muted); }
+.filter-chip:hover, .filter-reset:hover { border-color: var(--accent); }
+.filter-chip[hidden], .filter-reset[hidden] { display: none; }
+.filters-bar .info-button { cursor: pointer; font: inherit; font-size: 12px; font-weight: 650; color: var(--text); }
+.empty-note { width: 100%; padding: 26px 0; text-align: center; color: var(--muted); }
+
+/* ---------- Вкладки и статистика ---------- */
+.stats-tabs { display: flex; gap: 6px; margin: 10px 0 12px; }
+.stats-tab {
+    padding: 6px 13px; border: 1px solid var(--border); border-radius: 99px;
+    background: var(--glass); color: var(--muted); font: inherit; font-size: 12px; font-weight: 650; cursor: pointer;
+}
+.stats-tab.active { color: var(--text); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 18%, var(--glass)); }
+.stats-pane { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
+.stats-pane[hidden] { display: none; }
+.stats-h { margin: 14px 0 6px; font-size: 13px; font-weight: 700; }
+.stats-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stats-card { padding: 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--glass); text-align: center; }
+.stats-card b { display: block; font-size: 20px; }
+.stats-card span { font-size: 11px; color: var(--muted); }
+.authors-row.clickable, .stats-row { cursor: pointer; border-radius: 8px; }
+.authors-row.clickable:hover, .stats-row:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.stats-row { display: grid; grid-template-columns: 62px 1fr auto; align-items: center; column-gap: 10px; padding: 5px 4px; font-size: 13px; }
+.stats-row small { color: var(--muted); }
+.stats-row .authors-bar { grid-column: 2 / 3; margin: 0; }
+.big-list-row { display: flex; justify-content: space-between; gap: 10px; padding: 6px 4px; font-size: 13px; cursor: pointer; border-radius: 8px; }
+.big-list-row:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.big-list-row small { color: var(--muted); }
+
+/* ---------- Просмотр: стрелки и автор ---------- */
+.viewer-nav {
+    position: absolute; top: 50%; z-index: 4;
+    width: 48px; height: 48px; margin-top: -24px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border); border-radius: 50%;
+    background: var(--glass); backdrop-filter: blur(12px);
+    color: var(--text); cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+    transition: border-color .2s, background .2s;
+}
+.viewer-nav svg { width: 22px; height: 22px; }
+.viewer-nav:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 24%, var(--glass)); }
+.viewer-nav.prev { left: 18px; }
+.viewer-nav.next { right: 18px; }
+.viewer-nav[hidden] { display: none; }
+.viewer-author-link { cursor: pointer; border-bottom: 1px dashed transparent; }
+.viewer-author-link:hover { border-bottom-color: currentColor; }
+.viewer-link { font: inherit; font-size: 12px; font-weight: 650; background: var(--glass); border-color: var(--border); }
+@media (max-width: 768px) {
+    .viewer-nav { width: 40px; height: 40px; margin-top: -20px; opacity: .85; }
+    .viewer-nav.prev { left: 6px; }
+    .viewer-nav.next { right: 6px; }
+    .hint-keys { display: none; }
+    .filters-spacer { display: none; }
 }
 
 .info-actions {
@@ -1199,21 +1379,10 @@ header {
     }
 
 
-    .theme-selector {
+    .theme-picker .theme-selector {
 
         gap:
-            2px;
-
-    }
-
-
-    .theme-button {
-
-        width:
-            28px;
-
-        height:
-            28px;
+            6px;
 
     }
 
@@ -1305,12 +1474,102 @@ header {
 }
 
 
-.viewer-image-wrapper { overflow: auto; width: 94vw; max-width: 1400px; max-height: 78vh; padding: 6px; }
-.viewer-image { display: block; max-width: none; max-height: none; width: auto; height: auto; }
-.viewer-zoom { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:10px; }
-.viewer-zoom button { min-width:44px; height:32px; padding:0 9px; border:1px solid var(--border); border-radius:8px; background:var(--glass); color:var(--text); cursor:pointer; font-size:11px; font-weight:650; }
-.viewer-zoom button:hover, .viewer-zoom button.active { border-color:var(--accent); background:color-mix(in srgb,var(--accent) 18%,var(--glass)); }
-.viewer-zoom-value { min-width:48px; text-align:center; color:var(--muted); font-size:11px; }
+/* ---------- Viewer zoom (wheel / drag / pinch) ---------- */
+.viewer-image {
+    cursor: zoom-in;
+    transform-origin: 0 0;
+    will-change: transform;
+    transition: transform .12s ease-out;
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: none;
+}
+.viewer-image.zoomed { cursor: grab; }
+.viewer-image.dragging { cursor: grabbing; transition: none; }
+.viewer-image.pixelated { image-rendering: pixelated; }
+
+.viewer-info { position: relative; z-index: 3; }
+
+.viewer-tools {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+.viewer-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 22%, var(--glass));
+    backdrop-filter: blur(12px);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .2s, background .2s;
+}
+.viewer-download:hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--accent) 38%, var(--glass));
+}
+.viewer-download svg { width: 16px; height: 16px; flex: none; }
+
+
+.viewer-zoom-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+    cursor: default;
+    transition: border-color .2s, color .2s, background .2s;
+}
+.viewer-zoom-hint svg { width: 16px; height: 16px; flex: none; }
+.viewer-zoom-hint.active {
+    cursor: pointer;
+    color: var(--text);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 18%, var(--glass));
+}
+.viewer-zoom-hint.attention svg { animation: zoomHintPulse 1.6s ease-in-out infinite; }
+@keyframes zoomHintPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.3); }
+}
+/* ---------- Мобильная шапка ---------- */
+@media (max-width: 768px) {
+    header { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .logo-area { flex: 0 0 auto; }
+    .site-title-text { white-space: normal; }
+    .header-controls {
+        flex: 0 0 auto;
+        width: 100%;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .info-actions { width: 100%; }
+    .theme-picker .theme-selector {
+        position: fixed;
+        top: 90px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+}
 </style>
 
 </head>
@@ -1329,8 +1588,8 @@ header {
     <div class="logo-area">
 
         <h1 class="site-title">
-            <img class="map-logo" src="favicon.png" alt="">
-            <span>Галерея мап-арта — 2b2t.org.ru</span>
+            <svg class="map-logo" viewBox="0 0 15 12" shape-rendering="crispEdges" aria-hidden="true"><rect class="l1" x="8" y="0" width="2" height="1"/><rect class="l1" x="7" y="1" width="4" height="1"/><rect class="l1" x="6" y="2" width="2" height="1"/><rect class="m3" x="8" y="2" width="1" height="1"/><rect class="l2" x="9" y="2" width="1" height="1"/><rect class="l1" x="10" y="2" width="2" height="1"/><rect class="l1" x="4" y="3" width="2" height="1"/><rect class="l2" x="6" y="3" width="1" height="1"/><rect class="l1" x="7" y="3" width="1" height="1"/><rect class="m3" x="8" y="3" width="2" height="1"/><rect class="l2" x="10" y="3" width="1" height="1"/><rect class="l1" x="11" y="3" width="2" height="1"/><rect class="l1" x="2" y="4" width="2" height="1"/><rect class="l2" x="4" y="4" width="2" height="1"/><rect class="m1" x="6" y="4" width="1" height="1"/><rect class="m2" x="7" y="4" width="1" height="1"/><rect class="m3" x="8" y="4" width="1" height="1"/><rect class="l3" x="9" y="4" width="1" height="1"/><rect class="l2" x="10" y="4" width="2" height="1"/><rect class="l1" x="12" y="4" width="2" height="1"/><rect class="l1" x="0" y="5" width="2" height="1"/><rect class="l2" x="2" y="5" width="1" height="1"/><rect class="m3" x="3" y="5" width="1" height="1"/><rect class="l2" x="4" y="5" width="1" height="1"/><rect class="l3" x="5" y="5" width="1" height="1"/><rect class="m3" x="6" y="5" width="1" height="1"/><rect class="l3" x="7" y="5" width="1" height="1"/><rect class="l1" x="8" y="5" width="1" height="1"/><rect class="m3" x="9" y="5" width="1" height="1"/><rect class="l3" x="10" y="5" width="1" height="1"/><rect class="l2" x="11" y="5" width="4" height="1"/><rect class="ed" x="0" y="6" width="1" height="1"/><rect class="l2" x="1" y="6" width="2" height="1"/><rect class="m3" x="3" y="6" width="2" height="1"/><rect class="m2" x="5" y="6" width="1" height="1"/><rect class="m1" x="6" y="6" width="1" height="1"/><rect class="l2" x="7" y="6" width="2" height="1"/><rect class="m3" x="9" y="6" width="1" height="1"/><rect class="m2" x="10" y="6" width="1" height="1"/><rect class="l2" x="11" y="6" width="2" height="1"/><rect class="ed" x="13" y="6" width="2" height="1"/><rect class="ed" x="1" y="7" width="1" height="1"/><rect class="l2" x="2" y="7" width="3" height="1"/><rect class="m3" x="5" y="7" width="1" height="1"/><rect class="l1" x="6" y="7" width="1" height="1"/><rect class="m3" x="7" y="7" width="2" height="1"/><rect class="l2" x="9" y="7" width="1" height="1"/><rect class="l1" x="10" y="7" width="2" height="1"/><rect class="ed" x="12" y="7" width="1" height="1"/><rect class="ed" x="2" y="8" width="1" height="1"/><rect class="l2" x="3" y="8" width="2" height="1"/><rect class="m1" x="5" y="8" width="1" height="1"/><rect class="m2" x="6" y="8" width="1" height="1"/><rect class="l3" x="7" y="8" width="1" height="1"/><rect class="m3" x="8" y="8" width="1" height="1"/><rect class="l2" x="9" y="8" width="1" height="1"/><rect class="l1" x="10" y="8" width="1" height="1"/><rect class="ed" x="11" y="8" width="1" height="1"/><rect class="ed" x="3" y="9" width="1" height="1"/><rect class="l1" x="4" y="9" width="2" height="1"/><rect class="l2" x="6" y="9" width="3" height="1"/><rect class="ed" x="9" y="9" width="2" height="1"/><rect class="ed" x="4" y="10" width="1" height="1"/><rect class="l2" x="5" y="10" width="2" height="1"/><rect class="ed" x="7" y="10" width="2" height="1"/><rect class="ed" x="5" y="11" width="2" height="1"/></svg>
+            <span class="site-title-text">Галерея мап-арта<small>2b2t.org.ru</small></span>
         </h1>
 
 
@@ -1342,6 +1601,8 @@ header {
         <div class="info-actions">
             <button class="info-button" id="guideButton" type="button">Как пользоваться</button>
             <a class="info-button" id="discordButton" href="https://discord.gg/WtbDHWTtYU" target="_blank" rel="noopener">Discord мап-артов</a>
+            <button class="info-button" id="linksButton" type="button">Полезное</button>
+            <button class="info-button" id="authorsButton" type="button">Топ авторов</button>
             <button class="info-button" id="sourceButton" type="button">Об источнике данных</button>
         </div>
 
@@ -1419,7 +1680,17 @@ header {
 
         <!-- Темы -->
 
-        <div class="theme-selector">
+        <div class="theme-picker" id="themePicker">
+            <button class="theme-toggle" id="themeToggle" type="button" title="Оформление" aria-label="Оформление" aria-haspopup="true" aria-expanded="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4.1-4-7.2-9-7.2z"></path>
+                    <circle cx="7.5" cy="11.5" r="1.1" fill="currentColor"></circle>
+                    <circle cx="10.5" cy="7.5" r="1.1" fill="currentColor"></circle>
+                    <circle cx="15.5" cy="7.5" r="1.1" fill="currentColor"></circle>
+                </svg>
+                <span class="theme-dot"></span>
+            </button>
+            <div class="theme-selector">
 
             <button class="theme-button theme-midnight" data-theme="midnight" title="Midnight"></button>
             <button class="theme-button theme-sky" data-theme="sky" title="Sky"></button>
@@ -1433,10 +1704,52 @@ header {
             <button class="theme-button theme-aqua" data-theme="aqua" title="Aqua"></button>
 
         </div>
+        </div>
 
     </div>
 
 </header>
+
+
+<!-- =========================================================
+     FILTERS
+     ========================================================= -->
+
+<div class="filters-bar" id="filtersBar">
+
+    <label class="filter-field">
+        <span>Год</span>
+        <select id="yearFilter">
+            <option value="">Все</option>
+        </select>
+    </label>
+
+    <label class="filter-field">
+        <span>Размер</span>
+        <select id="sizeFilter">
+            <option value="">Любой</option>
+            <option value="s">До 4 карт</option>
+            <option value="m">5–9 карт</option>
+            <option value="l">10–16 карт</option>
+            <option value="xl">17 карт и больше</option>
+        </select>
+    </label>
+
+    <button type="button" class="filter-chip" id="authorChip" hidden title="Убрать фильтр по автору">
+        Автор: <b id="authorChipName"></b> <span aria-hidden="true">×</span>
+    </button>
+
+    <button type="button" class="filter-reset" id="filtersReset" hidden>Сбросить фильтры</button>
+
+    <span class="filters-spacer"></span>
+
+    <button type="button" class="info-button" id="randomButton">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3"></rect><circle cx="8.5" cy="8.5" r="1.1" fill="currentColor"></circle><circle cx="15.5" cy="8.5" r="1.1" fill="currentColor"></circle><circle cx="12" cy="12" r="1.1" fill="currentColor"></circle><circle cx="8.5" cy="15.5" r="1.1" fill="currentColor"></circle><circle cx="15.5" cy="15.5" r="1.1" fill="currentColor"></circle></svg>
+        &nbsp;Случайный арт
+    </button>
+
+</div>
+
 
 
 <!-- =========================================================
@@ -1521,6 +1834,49 @@ header {
     </div>
 </div>
 
+<div class="info-modal" id="linksModal">
+    <div class="info-modal-content">
+        <button class="info-modal-close" data-close="linksModal">×</button>
+        <h3>Полезное</h3>
+        <p class="authors-sub">Всё, что нужно, чтобы построить свой мап-арт.</p>
+
+        <a class="link-card" data-link="guide" target="_blank" rel="noopener">
+            <span class="link-card-title">Гайд по строительству <em class="link-soon">скоро</em></span>
+            <span class="link-card-text">Как построить мап-арт: от подготовки до результата.</span>
+        </a>
+
+        <a class="link-card" data-link="builder" target="_blank" rel="noopener">
+            <span class="link-card-title">Конструктор мап-артов</span>
+            <span class="link-card-text">Сайт Mapkluss, где можно собрать свой арт.</span>
+        </a>
+
+        <a class="link-card" data-link="resources" target="_blank" rel="noopener">
+            <span class="link-card-title">Как получить ресурсы</span>
+            <span class="link-card-text">Пост в Discord про добычу всего необходимого для строительства.</span>
+        </a>
+    </div>
+</div>
+
+<div class="info-modal" id="authorsModal">
+    <div class="info-modal-content authors-content">
+        <button class="info-modal-close" data-close="authorsModal">×</button>
+        <h3>Авторы и статистика</h3>
+
+        <div class="stats-tabs">
+            <button type="button" class="stats-tab active" data-tab="authors">Топ авторов</button>
+            <button type="button" class="stats-tab" data-tab="stats">Статистика</button>
+        </div>
+
+        <div class="stats-pane" id="paneAuthors">
+            <p class="authors-sub" id="authorsSub"></p>
+            <ol class="authors-list" id="authorsList"></ol>
+            <button type="button" class="authors-more" id="authorsMore" hidden></button>
+        </div>
+
+        <div class="stats-pane" id="paneStats" hidden></div>
+    </div>
+</div>
+
 <div class="info-modal" id="sourceModal">
     <div class="info-modal-content">
         <button class="info-modal-close" data-close="sourceModal">×</button>
@@ -1540,16 +1896,17 @@ header {
     id="viewer">
 
 
+    <button type="button" class="viewer-nav prev" id="viewerPrev" aria-label="Предыдущий арт" title="Предыдущий (←)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </button>
+    <button type="button" class="viewer-nav next" id="viewerNext" aria-label="Следующий арт" title="Следующий (→)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+    </button>
+
     <div class="viewer-content">
 
 
-        <button
-            class="viewer-close"
-            id="viewerClose">
-
-            ×
-
-        </button>
+        
 
 
         <div class="viewer-image-wrapper">
@@ -1563,11 +1920,31 @@ header {
         </div>
 
 
-        <div class="viewer-zoom" aria-label="Масштаб">
-            <button type="button" data-zoom="100">100%</button>
-            <button type="button" data-zoom="200">200%</button>
-            <button type="button" data-zoom="300">300%</button>
-            <span class="viewer-zoom-value" id="viewerZoomValue">100%</span>
+        <div class="viewer-tools">
+            <button type="button" class="viewer-zoom-hint attention" id="viewerZoomHint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+            <span id="viewerZoomText"></span>
+        </button>
+            <a class="viewer-download" id="viewerDownload" href="#" download title="Скачать изображение">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 4v11"></path>
+                    <path d="M7.5 11 12 15.5 16.5 11"></path>
+                    <path d="M5 19h14"></path>
+                </svg>
+                <span>Скачать</span>
+            </a>
+            <button type="button" class="viewer-download viewer-link" id="viewerLink" title="Скопировать ссылку на этот арт">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path>
+                    <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path>
+                </svg>
+                <span>Ссылка</span>
+            </button>
         </div>
 
 
@@ -1593,7 +1970,8 @@ header {
 
         <div class="viewer-hint">
 
-            ESC — закрыть
+            <span id="viewerCounter"></span>
+            <span class="hint-keys"> · ← → — листать · ESC или клик по фону — закрыть</span>
 
         </div>
 
@@ -1694,54 +2072,175 @@ const viewerSize =
     );
 
 
-const viewerClose =
-    document.getElementById(
-        "viewerClose"
-    );
-
-const viewerZoomValue = document.getElementById("viewerZoomValue");
-const viewerZoomButtons = document.querySelectorAll("[data-zoom]");
+const viewerContent = document.querySelector(".viewer-content");
 const viewerImageWrapper = document.querySelector(".viewer-image-wrapper");
-let viewerZoom = 100;
+const viewerZoomHint = document.getElementById("viewerZoomHint");
+const viewerDownload = document.getElementById("viewerDownload");
+const viewerZoomText = document.getElementById("viewerZoomText");
 
-function applyViewerZoom() {
-    if (!viewerImage.naturalWidth || !viewerImage.naturalHeight) return;
-    const maxWidth = Math.min(window.innerWidth * 0.92, 1400);
-    const maxHeight = window.innerHeight * 0.78;
-    const imageRatio = viewerImage.naturalWidth / viewerImage.naturalHeight;
+const IDLE_HINT = window.matchMedia("(pointer: coarse)").matches
+    ? "Двумя пальцами — приблизить"
+    : "Колесо мыши — приблизить";
 
-    let baseWidth = maxWidth;
-    let baseHeight = baseWidth / imageRatio;
+const zoom = { s: 1, x: 0, y: 0 };
 
-    if (baseHeight > maxHeight) {
-        baseHeight = maxHeight;
-        baseWidth = baseHeight * imageRatio;
+function clampNum(v, min, max) { return Math.min(max, Math.max(min, v)); }
+
+function maxZoom() {
+    const shown = viewerImage.offsetWidth || 1;
+    return Math.max(8, (viewerImage.naturalWidth / shown) * 4);
+}
+
+function clampPan() {
+    if (zoom.s <= 1.001) { zoom.s = 1; zoom.x = 0; zoom.y = 0; return; }
+    const r = viewerImageWrapper.getBoundingClientRect();
+    const w = viewerImage.offsetWidth * zoom.s;
+    const h = viewerImage.offsetHeight * zoom.s;
+    const m = 80;
+    zoom.x = clampNum(zoom.x, m - w - r.left, window.innerWidth - m - r.left);
+    zoom.y = clampNum(zoom.y, m - h - r.top, window.innerHeight - m - r.top);
+}
+
+function applyZoom() {
+    viewerImage.style.transform =
+        "translate(" + zoom.x + "px," + zoom.y + "px) scale(" + zoom.s + ")";
+
+    const zoomed = zoom.s > 1.001;
+    viewerImage.classList.toggle("zoomed", zoomed);
+    viewerZoomHint.classList.toggle("active", zoomed);
+
+    // пиксель-арт остаётся чётким, только когда изображение увеличено сверх оригинала
+    const upscaled = viewerImage.naturalWidth &&
+        viewerImage.offsetWidth * zoom.s > viewerImage.naturalWidth * 1.001;
+    viewerImage.classList.toggle("pixelated", !!upscaled);
+
+    if (zoomed) viewerZoomHint.classList.remove("attention");
+
+    viewerZoomText.textContent = zoomed
+        ? "×" + zoom.s.toFixed(1) + " · нажмите, чтобы сбросить"
+        : IDLE_HINT;
+}
+
+function resetZoom(instant) {
+    zoom.s = 1; zoom.x = 0; zoom.y = 0;
+    if (instant) {
+        viewerImage.classList.add("dragging");
+        applyZoom();
+        void viewerImage.offsetWidth;
+        viewerImage.classList.remove("dragging");
+    } else {
+        applyZoom();
     }
-
-    viewerImage.style.maxWidth = "none";
-    viewerImage.style.maxHeight = "none";
-    viewerImage.style.width = (baseWidth * viewerZoom / 100) + "px";
-    viewerImage.style.height = (baseHeight * viewerZoom / 100) + "px";
 }
 
-function setViewerZoom(value) {
-    viewerZoom = Number(value);
-    applyViewerZoom();
-    viewerZoomValue.textContent = viewerZoom + "%";
-    viewerZoomButtons.forEach(function(button) {
-        button.classList.toggle("active", Number(button.dataset.zoom) === viewerZoom);
-    });
+function zoomAt(cx, cy, newScale) {
+    newScale = clampNum(newScale, 1, maxZoom());
+    const r = viewerImageWrapper.getBoundingClientRect();
+    const px = (cx - r.left - zoom.x) / zoom.s;
+    const py = (cy - r.top - zoom.y) / zoom.s;
+    zoom.s = newScale;
+    zoom.x = cx - r.left - px * newScale;
+    zoom.y = cy - r.top - py * newScale;
+    clampPan();
+    applyZoom();
 }
 
-viewerImage.addEventListener("load", function() {
-    applyViewerZoom();
+viewerImage.addEventListener("load", applyZoom);
+
+/* колесо мыши */
+viewer.addEventListener("wheel", function(event) {
+    if (!viewer.classList.contains("active")) return;
+    event.preventDefault();
+    let d = event.deltaY;
+    if (event.deltaMode === 1) d *= 16;
+    else if (event.deltaMode === 2) d *= 100;
+    d = clampNum(d, -250, 250);
+    zoomAt(event.clientX, event.clientY, zoom.s * Math.exp(-d * 0.002));
+}, { passive: false });
+
+/* перетаскивание и щипок */
+const activePointers = new Map();
+let pinch = null;
+
+viewerImage.addEventListener("pointerdown", function(event) {
+    viewerImage.setPointerCapture(event.pointerId);
+    activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    viewerImage.classList.add("dragging");
+    if (activePointers.size === 1) swipeStart = { x: event.clientX, y: event.clientY };
+    if (activePointers.size === 2) {
+        gestureWasPinch = true;
+        const [p1, p2] = Array.from(activePointers.values());
+        pinch = {
+            dist: Math.hypot(p1.x - p2.x, p1.y - p2.y) || 1,
+            scale: zoom.s,
+            mx: (p1.x + p2.x) / 2,
+            my: (p1.y + p2.y) / 2
+        };
+    }
 });
 
-viewerZoomButtons.forEach(function(button) {
-    button.addEventListener("click", function(event) {
-        event.stopPropagation();
-        setViewerZoom(button.dataset.zoom);
-    });
+viewerImage.addEventListener("pointermove", function(event) {
+    const prev = activePointers.get(event.pointerId);
+    if (!prev) return;
+    const cur = { x: event.clientX, y: event.clientY };
+
+    if (activePointers.size === 2 && pinch) {
+        activePointers.set(event.pointerId, cur);
+        const [p1, p2] = Array.from(activePointers.values());
+        const mx = (p1.x + p2.x) / 2;
+        const my = (p1.y + p2.y) / 2;
+        zoom.x += mx - pinch.mx;
+        zoom.y += my - pinch.my;
+        pinch.mx = mx; pinch.my = my;
+        zoomAt(mx, my, pinch.scale * (Math.hypot(p1.x - p2.x, p1.y - p2.y) / pinch.dist));
+    } else if (activePointers.size === 1 && zoom.s > 1.001) {
+        zoom.x += cur.x - prev.x;
+        zoom.y += cur.y - prev.y;
+        activePointers.set(event.pointerId, cur);
+        clampPan();
+        applyZoom();
+    } else {
+        activePointers.set(event.pointerId, cur);
+    }
+});
+
+let swipeStart = null;
+let gestureWasPinch = false;
+
+function endPointer(event) {
+    const wasSingle = activePointers.size === 1;
+    activePointers.delete(event.pointerId);
+    if (activePointers.size < 2) pinch = null;
+    if (activePointers.size === 0) {
+        viewerImage.classList.remove("dragging");
+        if (event.type === "pointerup" && wasSingle && swipeStart && !gestureWasPinch && zoom.s <= 1.001) {
+            const dx = event.clientX - swipeStart.x;
+            const dy = event.clientY - swipeStart.y;
+            if (Math.abs(dx) > 60 && Math.abs(dy) < 60 && event.pointerType !== "mouse") {
+                stepViewer(dx < 0 ? 1 : -1);
+            }
+        }
+        swipeStart = null;
+        gestureWasPinch = false;
+    }
+}
+viewerImage.addEventListener("pointerup", endPointer);
+viewerImage.addEventListener("pointercancel", endPointer);
+
+/* двойной клик: приблизить / сбросить */
+viewerImage.addEventListener("dblclick", function(event) {
+    if (zoom.s > 1.001) resetZoom(false);
+    else zoomAt(event.clientX, event.clientY, 3);
+});
+
+/* плашка-подсказка сбрасывает масштаб, когда он изменён */
+viewerDownload.addEventListener("click", function(event) {
+    event.stopPropagation();
+});
+
+viewerZoomHint.addEventListener("click", function(event) {
+    event.stopPropagation();
+    if (zoom.s > 1.001) resetZoom(false);
 });
 
 
@@ -2204,6 +2703,9 @@ function createCard(
         );
 
 
+    image.loading = "lazy";
+    image.decoding = "async";
+
     image.src =
         imageSrc;
 
@@ -2396,7 +2898,7 @@ function renderBigMaps(maps) {
             const card = createCard(map, true);
             const ratio = getWidth(map) / getHeight(map);
             card.style.height = rowHeight + "px";
-            card.style.width = (rowHeight * ratio) + "px";
+            card.style.width = ((rowHeight - 2) * ratio + 2) + "px";
             rowEl.appendChild(card);
         });
 
@@ -2427,8 +2929,8 @@ function render() {
 
     smallMapsGrid.innerHTML = "";
 
-    const sortedBig = sortMaps(allData.bigMaps);
-    const sortedSmall = sortMaps(allData.smallMaps);
+    const sortedBig = sortMaps(allData.bigMaps).filter(passesFilters);
+    const sortedSmall = sortMaps(allData.smallMaps).filter(passesFilters);
 
     const visibleBig = currentSort === "selected"
         ? sortedBig.filter(function(map) { return selectedIds.has(selectionKey(map, true)); })
@@ -2441,11 +2943,21 @@ function render() {
     bigCount.textContent = visibleBig.length;
     smallCount.textContent = visibleSmall.length;
 
+    visibleLists.big = visibleBig;
+    visibleLists.small = visibleSmall;
+
     renderBigMaps(visibleBig);
 
     visibleSmall.forEach(function(map) {
         smallMapsGrid.appendChild(createCard(map, false));
     });
+
+    if (filtersActive()) {
+        if (!visibleBig.length) bigMapsGrid.innerHTML = '<div class="empty-note">По этим фильтрам ничего не найдено</div>';
+        if (!visibleSmall.length) smallMapsGrid.innerHTML = '<div class="empty-note">По этим фильтрам ничего не найдено</div>';
+    }
+
+    syncFilterUI();
 
     updateAgeMode();
     updateSelectionUI();
@@ -2498,8 +3010,11 @@ async function loadData() {
             ? data.smallMaps
             : [];
 
+        populateYearFilter();
 
         render();
+
+        openArtFromHash();
 
 
     }
@@ -2560,69 +3075,156 @@ sortSelect.addEventListener(
    VIEWER
    ========================================================= */
 
-function openViewer(
-    map,
-    imageSrc
-) {
+const visibleLists = { big: [], small: [] };
+const viewerCtx = { list: [], index: -1, current: null };
+const viewerPrev = document.getElementById("viewerPrev");
+const viewerNext = document.getElementById("viewerNext");
+const viewerCounter = document.getElementById("viewerCounter");
+const viewerLink = document.getElementById("viewerLink");
 
-    viewerImage.src =
-        imageSrc;
-
-    setViewerZoom(100);
-
-
-    viewerAuthor.textContent =
-        map.author ||
-        "Неизвестный автор";
-
-
-    viewerDate.textContent =
-        formatDate(
-            map.date
-        );
-
-
-    viewerSize.textContent =
-        "Размер: " +
-        getSizeText(map);
-
-
-    viewer.classList.add(
-        "active"
-    );
-
-
-    document.body.style.overflow =
-        "hidden";
-
+function viewerAllowed(map) {
+    return !(map.nsfw && !adultsAllowed);
 }
 
+function setArtHash(id) {
+    const parts = window.location.hash.replace(/^#/, "").split("&").filter(function(part) {
+        return part && part.indexOf("art=") !== 0;
+    });
+    if (id) parts.push("art=" + encodeURIComponent(id));
+    const hash = parts.length ? "#" + parts.join("&") : "";
+    history.replaceState(null, "", window.location.pathname + window.location.search + hash);
+}
+
+function artLink(map) {
+    return window.location.origin + window.location.pathname + "#art=" + encodeURIComponent(map.id);
+}
+
+function renderViewerAuthors(map) {
+    viewerAuthor.textContent = "";
+    const names = splitAuthors(map.author);
+    if (!names.length) {
+        viewerAuthor.textContent = "Неизвестный автор";
+        return;
+    }
+    names.forEach(function(name, i) {
+        if (i) viewerAuthor.appendChild(document.createTextNode(", "));
+        const span = document.createElement("span");
+        span.className = "viewer-author-link";
+        span.textContent = name;
+        span.title = "Показать все арты автора";
+        span.addEventListener("click", function() {
+            closeViewer();
+            setAuthorFilter(name);
+        });
+        viewerAuthor.appendChild(span);
+    });
+}
+
+function showViewerMap(map) {
+    const imageSrc = map.image || "";
+    viewerCtx.current = map;
+
+    viewerImage.src = imageSrc;
+    resetZoom(true);
+    viewerZoomHint.classList.add("attention");
+
+    viewerDownload.href = imageSrc;
+    viewerDownload.download =
+        (String(imageSrc).split("?")[0].split("/").pop()) || "map-art.png";
+
+    renderViewerAuthors(map);
+    viewerDate.textContent = formatDate(map.date);
+    viewerSize.textContent = "Размер: " + getSizeText(map);
+
+    const total = viewerCtx.list.length;
+    viewerCounter.textContent = total > 1 ? (viewerCtx.index + 1) + " / " + total : "";
+    viewerPrev.hidden = viewerNext.hidden = total < 2;
+
+    setArtHash(map.id);
+
+    // подгружаем соседей, чтобы листание было мгновенным
+    [-1, 1].forEach(function(step) {
+        if (total < 2) return;
+        const neighbour = viewerCtx.list[(viewerCtx.index + step + total) % total];
+        if (neighbour && neighbour.image) new Image().src = neighbour.image;
+    });
+}
+
+function openViewer(map, imageSrc) {
+    const big = allData.bigMaps.indexOf(map) !== -1;
+    const source = big ? visibleLists.big : visibleLists.small;
+    viewerCtx.list = source.filter(viewerAllowed);
+    viewerCtx.index = viewerCtx.list.indexOf(map);
+    if (viewerCtx.index === -1) {
+        viewerCtx.list = [map];
+        viewerCtx.index = 0;
+    }
+
+    showViewerMap(map);
+
+    viewer.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function stepViewer(direction) {
+    const total = viewerCtx.list.length;
+    if (total < 2 || !viewer.classList.contains("active")) return;
+    viewerCtx.index = (viewerCtx.index + direction + total) % total;
+    showViewerMap(viewerCtx.list[viewerCtx.index]);
+}
 
 function closeViewer() {
-
-    viewer.classList.remove(
-        "active"
-    );
-
-
-    document.body.style.overflow =
-        "";
-
+    if (viewer.classList.contains("active")) setArtHash(null);
+    viewer.classList.remove("active");
+    document.body.style.overflow = "";
 }
 
+viewerPrev.addEventListener("click", function(event) { event.stopPropagation(); stepViewer(-1); });
+viewerNext.addEventListener("click", function(event) { event.stopPropagation(); stepViewer(1); });
 
-viewerClose.addEventListener(
-    "click",
-    closeViewer
-);
+document.addEventListener("keydown", function(event) {
+    if (!viewer.classList.contains("active")) return;
+    if (event.key === "ArrowLeft") { event.preventDefault(); stepViewer(-1); }
+    else if (event.key === "ArrowRight") { event.preventDefault(); stepViewer(1); }
+});
 
+viewerLink.addEventListener("click", function(event) {
+    event.stopPropagation();
+    if (!viewerCtx.current) return;
+    const label = viewerLink.querySelector("span");
+    navigator.clipboard.writeText(artLink(viewerCtx.current)).then(function() {
+        label.textContent = "Скопировано ✓";
+        setTimeout(function() { label.textContent = "Ссылка"; }, 1500);
+    });
+});
+
+/* открыть арт по ссылке #art=ID (в том числе при ручной смене адреса) */
+function openArtFromHash() {
+    const raw = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("art");
+    if (!raw) return false;
+    const all = allData.bigMaps.concat(allData.smallMaps);
+    const map = all.find(function(item) { return String(item.id) === raw; });
+    if (!map || !viewerAllowed(map)) return false;
+    if (!(visibleLists.big.indexOf(map) !== -1 || visibleLists.small.indexOf(map) !== -1)) {
+        resetFilters();   // арт скрыт фильтрами — показываем всё
+    }
+    openViewer(map, map.image || "");
+    return true;
+}
+
+window.addEventListener("hashchange", function() {
+    const raw = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("art");
+    if (raw) openArtFromHash();
+    else if (viewer.classList.contains("active")) closeViewer();
+});
 
 viewer.addEventListener(
     "click",
     function(event) {
 
         if (
-            event.target === viewer
+            event.target === viewer ||
+            event.target === viewerContent
         ) {
 
             closeViewer();
@@ -2741,6 +3343,38 @@ themeButtons.forEach(
 );
 
 
+/* ---------- выпадающий список оформления ---------- */
+const themePicker = document.getElementById("themePicker");
+const themeToggle = document.getElementById("themeToggle");
+
+function setThemePickerOpen(open) {
+    if (open && window.innerWidth <= 768) {
+        // на телефоне палитра по центру экрана, прямо под кнопкой
+        const rect = themeToggle.getBoundingClientRect();
+        themePicker.querySelector(".theme-selector").style.top = (rect.bottom + 8) + "px";
+    }
+    themePicker.classList.toggle("open", open);
+    themeToggle.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+themeToggle.addEventListener("click", function(event) {
+    event.stopPropagation();
+    setThemePickerOpen(!themePicker.classList.contains("open"));
+});
+
+themeButtons.forEach(function(button) {
+    button.addEventListener("click", function() { setThemePickerOpen(false); });
+});
+
+document.addEventListener("click", function(event) {
+    if (!themePicker.contains(event.target)) setThemePickerOpen(false);
+});
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") setThemePickerOpen(false);
+});
+
+
 /* =========================================================
    SORT DEFAULT
    ========================================================= */
@@ -2783,6 +3417,351 @@ document.querySelectorAll("[data-close]").forEach(function(button) {
 document.querySelectorAll(".info-modal").forEach(function(modal) {
     modal.addEventListener("click", function(event) { if (event.target === modal) modal.classList.remove("active"); });
 });
+
+
+/* =========================================================
+   ТОП АВТОРОВ
+   (авторы в data.json записаны через запятую — разбираем здесь)
+   ========================================================= */
+
+const authorsModal = document.getElementById("authorsModal");
+const authorsList = document.getElementById("authorsList");
+const authorsSub = document.getElementById("authorsSub");
+const authorsMore = document.getElementById("authorsMore");
+const AUTHORS_PREVIEW = 10;
+let authorsShowAll = false;
+
+function splitAuthors(value) {
+    return String(value || "")
+        .split(",")
+        .map(function(name) { return name.trim(); })
+        .filter(function(name) { return name && name !== "-" && name !== "—"; });
+}
+
+function computeTopAuthors() {
+    const all = allData.bigMaps.concat(allData.smallMaps);
+    const stats = new Map();
+    let unknown = 0;
+
+    all.forEach(function(map) {
+        const names = splitAuthors(map.author);
+        if (!names.length) { unknown++; return; }
+
+        const seen = new Set();
+        names.forEach(function(name) {
+            const key = name.toLowerCase();
+            if (seen.has(key)) return;
+            seen.add(key);
+            if (!stats.has(key)) stats.set(key, { name: name, count: 0 });
+            stats.get(key).count++;
+        });
+    });
+
+    const list = Array.from(stats.values()).sort(function(a, b) {
+        return b.count - a.count || a.name.localeCompare(b.name, "ru", { sensitivity: "base" });
+    });
+
+    return { list: list, total: all.length, unknown: unknown };
+}
+
+function renderAuthors() {
+    const result = computeTopAuthors();
+    const list = result.list;
+
+    authorsList.innerHTML = "";
+    authorsSub.textContent =
+        "Артов: " + result.total + " · авторов: " + list.length +
+        (result.unknown ? " · автор не указан: " + result.unknown : "");
+
+    if (!list.length) {
+        authorsList.textContent = "Данные ещё не загружены.";
+        authorsMore.hidden = true;
+        return;
+    }
+
+    const max = list[0].count;
+    const visible = authorsShowAll ? list : list.slice(0, AUTHORS_PREVIEW);
+
+    visible.forEach(function(author) {
+        // одинаковое число артов — одинаковое место
+        const rank = 1 + list.filter(function(a) { return a.count > author.count; }).length;
+
+        const row = document.createElement("li");
+        row.className = "authors-row clickable" + (rank <= 3 ? " top" : "");
+        row.title = "Показать арты автора";
+        row.addEventListener("click", function() { setAuthorFilter(author.name); });
+
+        const rankEl = document.createElement("span");
+        rankEl.className = "authors-rank";
+        rankEl.textContent = rank;
+
+        const nameEl = document.createElement("span");
+        nameEl.className = "authors-name";
+        nameEl.textContent = author.name;
+
+        const countEl = document.createElement("span");
+        countEl.className = "authors-count";
+        countEl.textContent = author.count;
+
+        const bar = document.createElement("div");
+        bar.className = "authors-bar";
+        const fill = document.createElement("i");
+        fill.style.width = (author.count / max * 100) + "%";
+        bar.appendChild(fill);
+
+        row.append(rankEl, nameEl, countEl, bar);
+        authorsList.appendChild(row);
+    });
+
+    authorsMore.hidden = list.length <= AUTHORS_PREVIEW;
+    authorsMore.textContent = authorsShowAll
+        ? "Свернуть"
+        : "Показать всех (" + list.length + ")";
+}
+
+document.getElementById("authorsButton").addEventListener("click", function() {
+    authorsShowAll = false;
+    renderAuthors();
+    showStatsTab("authors");
+    authorsModal.classList.add("active");
+});
+
+authorsMore.addEventListener("click", function() {
+    authorsShowAll = !authorsShowAll;
+    renderAuthors();
+});
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        document.querySelectorAll(".info-modal.active").forEach(function(modal) {
+            modal.classList.remove("active");
+        });
+    }
+});
+
+
+/* =========================================================
+   ФИЛЬТРЫ
+   ========================================================= */
+
+const filters = { year: "", size: "", author: "" };
+const yearFilter = document.getElementById("yearFilter");
+const sizeFilter = document.getElementById("sizeFilter");
+const authorChip = document.getElementById("authorChip");
+const authorChipName = document.getElementById("authorChipName");
+const filtersReset = document.getElementById("filtersReset");
+
+function mapYear(map) {
+    const year = String(map.date || "").slice(0, 4);
+    return /^\d{4}$/.test(year) && year !== "0000" ? year : "none";
+}
+
+function sizeBucket(map) {
+    const area = getArea(map);
+    if (area <= 4) return "s";
+    if (area <= 9) return "m";
+    if (area <= 16) return "l";
+    return "xl";
+}
+
+function passesFilters(map) {
+    if (filters.year && mapYear(map) !== filters.year) return false;
+    if (filters.size && sizeBucket(map) !== filters.size) return false;
+    if (filters.author) {
+        const wanted = filters.author.toLowerCase();
+        const has = splitAuthors(map.author).some(function(name) {
+            return name.toLowerCase() === wanted;
+        });
+        if (!has) return false;
+    }
+    return true;
+}
+
+function filtersActive() {
+    return !!(filters.year || filters.size || filters.author);
+}
+
+function syncFilterUI() {
+    yearFilter.value = filters.year;
+    sizeFilter.value = filters.size;
+    yearFilter.parentElement.classList.toggle("active", !!filters.year);
+    sizeFilter.parentElement.classList.toggle("active", !!filters.size);
+    authorChip.hidden = !filters.author;
+    authorChipName.textContent = filters.author;
+    filtersReset.hidden = !filtersActive();
+}
+
+function populateYearFilter() {
+    const years = new Set();
+    allData.bigMaps.concat(allData.smallMaps).forEach(function(map) { years.add(mapYear(map)); });
+    const sorted = Array.from(years).filter(function(y) { return y !== "none"; }).sort().reverse();
+    yearFilter.innerHTML = '<option value="">Все</option>';
+    sorted.forEach(function(year) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+    });
+    if (years.has("none")) {
+        const option = document.createElement("option");
+        option.value = "none";
+        option.textContent = "Без даты";
+        yearFilter.appendChild(option);
+    }
+}
+
+function scrollToGallery() {
+    const bar = document.getElementById("filtersBar");
+    if (bar) bar.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function setAuthorFilter(name) {
+    filters.author = name || "";
+    document.getElementById("authorsModal").classList.remove("active");
+    render();
+    if (name) scrollToGallery();
+}
+
+function resetFilters() {
+    filters.year = filters.size = filters.author = "";
+    render();
+}
+
+yearFilter.addEventListener("change", function() { filters.year = yearFilter.value; render(); });
+sizeFilter.addEventListener("change", function() { filters.size = sizeFilter.value; render(); });
+authorChip.addEventListener("click", function() { filters.author = ""; render(); });
+filtersReset.addEventListener("click", resetFilters);
+
+/* ---------- случайный арт ---------- */
+document.getElementById("randomButton").addEventListener("click", function() {
+    const pool = visibleLists.big.concat(visibleLists.small).filter(viewerAllowed);
+    if (!pool.length) return;
+    const map = pool[Math.floor(Math.random() * pool.length)];
+    openViewer(map, map.image || "");
+});
+
+/* =========================================================
+   ПОЛЕЗНОЕ (ссылки)
+   ========================================================= */
+
+const USEFUL_LINKS = {
+    guide: "",   // <-- сюда позже вставь ссылку на гайд по строительству
+    builder: "https://mapkluss.art/",
+    resources: "https://discord.com/channels/1488510570687627475/1488907061344469194/1550035353606430771"
+};
+
+document.querySelectorAll("[data-link]").forEach(function(card) {
+    const url = USEFUL_LINKS[card.dataset.link];
+    if (url) {
+        card.href = url;
+        const soon = card.querySelector(".link-soon");
+        if (soon) soon.remove();
+    } else {
+        card.removeAttribute("href");
+        card.classList.add("disabled");
+    }
+});
+
+document.getElementById("linksButton").addEventListener("click", function() {
+    document.getElementById("linksModal").classList.add("active");
+});
+
+/* =========================================================
+   ВКЛАДКИ: АВТОРЫ / СТАТИСТИКА
+   ========================================================= */
+
+const paneAuthors = document.getElementById("paneAuthors");
+const paneStats = document.getElementById("paneStats");
+
+function showStatsTab(tab) {
+    document.querySelectorAll(".stats-tab").forEach(function(button) {
+        button.classList.toggle("active", button.dataset.tab === tab);
+    });
+    paneAuthors.hidden = tab !== "authors";
+    paneStats.hidden = tab !== "stats";
+    if (tab === "stats") renderStats();
+}
+
+document.querySelectorAll(".stats-tab").forEach(function(button) {
+    button.addEventListener("click", function() { showStatsTab(button.dataset.tab); });
+});
+
+function renderStats() {
+    const all = allData.bigMaps.concat(allData.smallMaps);
+    const authors = computeTopAuthors().list.length;
+    paneStats.innerHTML = "";
+
+    const cards = document.createElement("div");
+    cards.className = "stats-cards";
+    [[all.length, "всего артов"], [allData.bigMaps.length, "крупных"], [authors, "авторов"]].forEach(function(item) {
+        const card = document.createElement("div");
+        card.className = "stats-card";
+        card.innerHTML = "<b>" + item[0] + "</b><span>" + item[1] + "</span>";
+        cards.appendChild(card);
+    });
+    paneStats.appendChild(cards);
+
+    // по годам
+    const years = new Map();
+    all.forEach(function(map) {
+        const y = mapYear(map);
+        years.set(y, (years.get(y) || 0) + 1);
+    });
+    const yearList = Array.from(years.entries()).sort(function(a, b) {
+        if (a[0] === "none") return 1;
+        if (b[0] === "none") return -1;
+        return b[0].localeCompare(a[0]);
+    });
+    const maxYear = Math.max.apply(null, yearList.map(function(item) { return item[1]; }));
+
+    const h1 = document.createElement("div");
+    h1.className = "stats-h";
+    h1.textContent = "Арты по годам";
+    paneStats.appendChild(h1);
+
+    yearList.forEach(function(item) {
+        const row = document.createElement("div");
+        row.className = "stats-row";
+        const label = document.createElement("span");
+        label.textContent = item[0] === "none" ? "Без даты" : item[0];
+        const bar = document.createElement("div");
+        bar.className = "authors-bar";
+        const fill = document.createElement("i");
+        fill.style.width = (item[1] / maxYear * 100) + "%";
+        bar.appendChild(fill);
+        const count = document.createElement("small");
+        count.textContent = item[1];
+        row.append(label, bar, count);
+        row.title = "Показать арты за этот период";
+        row.addEventListener("click", function() {
+            filters.year = item[0];
+            document.getElementById("authorsModal").classList.remove("active");
+            render();
+            scrollToGallery();
+        });
+        paneStats.appendChild(row);
+    });
+
+    // самые большие
+    const h2 = document.createElement("div");
+    h2.className = "stats-h";
+    h2.textContent = "Самые большие арты";
+    paneStats.appendChild(h2);
+
+    all.filter(viewerAllowed).sort(function(a, b) { return getArea(b) - getArea(a); }).slice(0, 5).forEach(function(map) {
+        const row = document.createElement("div");
+        row.className = "big-list-row";
+        const names = splitAuthors(map.author).join(", ") || "автор не указан";
+        row.innerHTML = "<span><b>" + getSizeText(map) + "</b> · " + escapeHtml(names) + "</span><small>" + escapeHtml(formatDate(map.date)) + "</small>";
+        row.addEventListener("click", function() {
+            document.getElementById("authorsModal").classList.remove("active");
+            filters.year = filters.size = filters.author = "";
+            render();
+            openViewer(map, map.image || "");
+        });
+        paneStats.appendChild(row);
+    });
+}
 
 
 /* =========================================================

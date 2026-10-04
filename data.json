@@ -2,7 +2,7 @@
     "bigMaps": [
         {
             "id": "ma-000001",
-            "author": "TheFullZooMi",
+            "author": "TheFullZooMi, 228VITAL1K228",
             "title": "-",
             "date": "2026-08",
             "size": "6x3",
@@ -78,7 +78,7 @@
             "size": "4x6",
             "ratio": "4 / 6",
             "image": "maps/ma-000008.png",
-            "nsfw": false
+            "nsfw": true
         },
         {
             "id": "ma-000009",
@@ -1840,16 +1840,6 @@
         "size": "1x1",
         "ratio": "1 / 1",
         "image": "maps/139.png",
-        "nsfw": false
-    },
-    {
-        "id": "ma-140",
-        "author": "Twedis",
-        "title": "",
-        "date": "2022-04",
-        "size": "1x1",
-        "ratio": "1 / 1",
-        "image": "maps/140.png",
         "nsfw": false
     }
     ]
