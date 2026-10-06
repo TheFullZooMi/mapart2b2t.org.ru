@@ -1841,6 +1841,36 @@
         "ratio": "1 / 1",
         "image": "maps/139.png",
         "nsfw": false
+    },
+    {
+        "id": "ma-140",
+        "author": "Twedis",
+        "title": "fluttershy",
+        "date": "2022-04",
+        "size": "1x1",
+        "ratio": "1 / 1",
+        "image": "maps/140.png",
+        "nsfw": false
+    },
+    {
+        "id": "ma-141",
+        "author": "gazon",
+        "title": "HEV",
+        "date": "2025-09",
+        "size": "1x1",
+        "ratio": "1 / 1",
+        "image": "maps/141.png",
+        "nsfw": false
+    },
+    {
+        "id": "ma-142",
+        "author": "REZONATOR",
+        "title": "D.T. & V.P.",
+        "date": "2025-01",
+        "size": "1x1",
+        "ratio": "1 / 1",
+        "image": "maps/142.png",
+        "nsfw": false
     }
     ]
 }

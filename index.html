@@ -1098,6 +1098,9 @@ header {
 .map-logo .m2 { fill: var(--logo-ink2); }
 .map-logo .m3 { fill: var(--logo-ink3); }
 
+.site-title { cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+.site-title:hover .site-title-text { opacity: .85; }
+.site-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 10px; }
 .logo-area { flex: 0 0 auto; }
 .site-title-text { display: flex; flex-direction: column; line-height: 1.15; white-space: nowrap; }
 .header-controls { flex: 1 1 0; min-width: 0; }
@@ -1256,9 +1259,9 @@ header {
 .viewer-author-link:hover { border-bottom-color: currentColor; }
 .viewer-link { font: inherit; font-size: 12px; font-weight: 650; background: var(--glass); border-color: var(--border); }
 @media (max-width: 768px) {
-    .viewer-nav { width: 40px; height: 40px; margin-top: -20px; opacity: .85; }
-    .viewer-nav.prev { left: 6px; }
-    .viewer-nav.next { right: 6px; }
+    .viewer-nav { top: auto; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); width: 44px; height: 44px; margin-top: 0; }
+    .viewer-nav.prev { left: 14px; }
+    .viewer-nav.next { right: 14px; }
     .hint-keys { display: none; }
     .filters-spacer { display: none; }
 }
@@ -1570,6 +1573,21 @@ header {
         transform: translateX(-50%);
     }
 }
+/* ---------- Мобильные устройства ---------- */
+.info { overflow: hidden; min-width: 0; }
+.info .author, .info .date, .info .size {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+body { overflow-x: clip; }
+
+/* на сенсорных экранах нет наведения: подпись на карточке не нужна (всё есть в просмотре) */
+@media (hover: none) {
+    .info { display: none; }
+    .big-card:hover, .small-card:hover { transform: none; }
+    .big-card:hover img, .small-card:hover img { transform: none; }
+}
 </style>
 
 </head>
@@ -1587,7 +1605,7 @@ header {
 
     <div class="logo-area">
 
-        <h1 class="site-title">
+        <h1 class="site-title" id="siteTitle" role="button" tabindex="0" title="На главную: сбросить фильтры и настройки">
             <svg class="map-logo" viewBox="0 0 15 12" shape-rendering="crispEdges" aria-hidden="true"><rect class="l1" x="8" y="0" width="2" height="1"/><rect class="l1" x="7" y="1" width="4" height="1"/><rect class="l1" x="6" y="2" width="2" height="1"/><rect class="m3" x="8" y="2" width="1" height="1"/><rect class="l2" x="9" y="2" width="1" height="1"/><rect class="l1" x="10" y="2" width="2" height="1"/><rect class="l1" x="4" y="3" width="2" height="1"/><rect class="l2" x="6" y="3" width="1" height="1"/><rect class="l1" x="7" y="3" width="1" height="1"/><rect class="m3" x="8" y="3" width="2" height="1"/><rect class="l2" x="10" y="3" width="1" height="1"/><rect class="l1" x="11" y="3" width="2" height="1"/><rect class="l1" x="2" y="4" width="2" height="1"/><rect class="l2" x="4" y="4" width="2" height="1"/><rect class="m1" x="6" y="4" width="1" height="1"/><rect class="m2" x="7" y="4" width="1" height="1"/><rect class="m3" x="8" y="4" width="1" height="1"/><rect class="l3" x="9" y="4" width="1" height="1"/><rect class="l2" x="10" y="4" width="2" height="1"/><rect class="l1" x="12" y="4" width="2" height="1"/><rect class="l1" x="0" y="5" width="2" height="1"/><rect class="l2" x="2" y="5" width="1" height="1"/><rect class="m3" x="3" y="5" width="1" height="1"/><rect class="l2" x="4" y="5" width="1" height="1"/><rect class="l3" x="5" y="5" width="1" height="1"/><rect class="m3" x="6" y="5" width="1" height="1"/><rect class="l3" x="7" y="5" width="1" height="1"/><rect class="l1" x="8" y="5" width="1" height="1"/><rect class="m3" x="9" y="5" width="1" height="1"/><rect class="l3" x="10" y="5" width="1" height="1"/><rect class="l2" x="11" y="5" width="4" height="1"/><rect class="ed" x="0" y="6" width="1" height="1"/><rect class="l2" x="1" y="6" width="2" height="1"/><rect class="m3" x="3" y="6" width="2" height="1"/><rect class="m2" x="5" y="6" width="1" height="1"/><rect class="m1" x="6" y="6" width="1" height="1"/><rect class="l2" x="7" y="6" width="2" height="1"/><rect class="m3" x="9" y="6" width="1" height="1"/><rect class="m2" x="10" y="6" width="1" height="1"/><rect class="l2" x="11" y="6" width="2" height="1"/><rect class="ed" x="13" y="6" width="2" height="1"/><rect class="ed" x="1" y="7" width="1" height="1"/><rect class="l2" x="2" y="7" width="3" height="1"/><rect class="m3" x="5" y="7" width="1" height="1"/><rect class="l1" x="6" y="7" width="1" height="1"/><rect class="m3" x="7" y="7" width="2" height="1"/><rect class="l2" x="9" y="7" width="1" height="1"/><rect class="l1" x="10" y="7" width="2" height="1"/><rect class="ed" x="12" y="7" width="1" height="1"/><rect class="ed" x="2" y="8" width="1" height="1"/><rect class="l2" x="3" y="8" width="2" height="1"/><rect class="m1" x="5" y="8" width="1" height="1"/><rect class="m2" x="6" y="8" width="1" height="1"/><rect class="l3" x="7" y="8" width="1" height="1"/><rect class="m3" x="8" y="8" width="1" height="1"/><rect class="l2" x="9" y="8" width="1" height="1"/><rect class="l1" x="10" y="8" width="1" height="1"/><rect class="ed" x="11" y="8" width="1" height="1"/><rect class="ed" x="3" y="9" width="1" height="1"/><rect class="l1" x="4" y="9" width="2" height="1"/><rect class="l2" x="6" y="9" width="3" height="1"/><rect class="ed" x="9" y="9" width="2" height="1"/><rect class="ed" x="4" y="10" width="1" height="1"/><rect class="l2" x="5" y="10" width="2" height="1"/><rect class="ed" x="7" y="10" width="2" height="1"/><rect class="ed" x="5" y="11" width="2" height="1"/></svg>
             <span class="site-title-text">Галерея мап-арта<small>2b2t.org.ru</small></span>
         </h1>
@@ -2867,12 +2885,21 @@ function renderBigMaps(maps) {
 
     if (!maps.length) return;
 
-    const gap = 18;
-    const targetHeight = 220;
     const containerWidth = bigMapsGrid.clientWidth;
+    const narrow = containerWidth < 640;
 
-    let row = [];
-    let ratioSum = 0;
+    const gap = narrow ? 10 : 18;
+    const targetHeight = narrow ? 150 : 220;
+    const minRowHeight = narrow ? 90 : 150;
+
+    function ratioOf(map) { return getWidth(map) / getHeight(map); }
+
+    // высота ряда, при которой он ровно занимает всю ширину контейнера
+    function solveHeight(items) {
+        const gaps = gap * (items.length - 1);
+        const sum = items.reduce(function(acc, map) { return acc + ratioOf(map); }, 0);
+        return (containerWidth - gaps - 2 * items.length) / sum + 2;
+    }
 
     function appendRow(items, isLast) {
 
@@ -2880,33 +2907,37 @@ function renderBigMaps(maps) {
 
         const rowEl = document.createElement("div");
         rowEl.className = "big-row";
+        rowEl.style.gap = gap + "px";
 
-        const totalGap = gap * (items.length - 1);
-        let rowHeight;
-
-        if (isLast) {
-            rowHeight = targetHeight;
-        } else {
-            rowHeight = (containerWidth - totalGap) / items.reduce(function(sum, map) {
-                return sum + (getWidth(map) / getHeight(map));
-            }, 0);
-
-            rowHeight = Math.max(150, Math.min(targetHeight, rowHeight));
-        }
+        // карточки никогда не выше целевой высоты и не шире контейнера
+        let rowHeight = Math.min(targetHeight, solveHeight(items));
+        if (!isLast) rowHeight = Math.max(minRowHeight, rowHeight);
+        rowHeight = Math.min(rowHeight, solveHeight(items));
 
         items.forEach(function(map) {
             const card = createCard(map, true);
-            const ratio = getWidth(map) / getHeight(map);
             card.style.height = rowHeight + "px";
-            card.style.width = ((rowHeight - 2) * ratio + 2) + "px";
+            card.style.width = ((rowHeight - 2) * ratioOf(map) + 2) + "px";
+            card.style.maxWidth = "100%";
             rowEl.appendChild(card);
         });
 
         bigMapsGrid.appendChild(rowEl);
     }
 
+    let row = [];
+    let ratioSum = 0;
+
     maps.forEach(function(map) {
-        const ratio = getWidth(map) / getHeight(map);
+        const ratio = ratioOf(map);
+
+        // на узком экране не склеиваем в один ряд, если карточки получатся слишком мелкими
+        if (narrow && row.length && solveHeight(row.concat([map])) < minRowHeight) {
+            appendRow(row, false);
+            row = [];
+            ratioSum = 0;
+        }
+
         row.push(map);
         ratioSum += ratio;
 
@@ -3388,15 +3419,18 @@ sortSelect.value =
    ========================================================= */
 
 let resizeTimer;
+let lastGridWidth = 0;
 
 window.addEventListener("resize", function() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function() {
-        if (allData.bigMaps.length) {
-            renderBigMaps(sortMaps(allData.bigMaps));
-            updateAgeMode();
+        // на телефоне resize срабатывает и при скрытии адресной строки — реагируем только на смену ширины
+        const width = bigMapsGrid.clientWidth;
+        if (allData.bigMaps.length && width !== lastGridWidth) {
+            lastGridWidth = width;
+            render();
         }
-    }, 120);
+    }, 150);
 });
 
 
@@ -3762,6 +3796,42 @@ function renderStats() {
         paneStats.appendChild(row);
     });
 }
+
+
+/* =========================================================
+   КЛИК ПО НАЗВАНИЮ / ЛОГОТИПУ: НА ГЛАВНУЮ И СБРОС
+   ========================================================= */
+
+function resetAll() {
+    closeViewer();
+    document.querySelectorAll(".info-modal.active").forEach(function(modal) {
+        modal.classList.remove("active");
+    });
+    setThemePickerOpen(false);
+
+    // фильтры, выбор артов и сортировка
+    filters.year = filters.size = filters.author = "";
+    selectedIds.clear();
+    selectionMode = false;
+    currentSort = "date-desc";
+    localStorage.removeItem("gallery-sort");
+    sortSelect.value = currentSort;
+
+    // убираем всё из адреса (#art=…, #maps=…)
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+const siteTitle = document.getElementById("siteTitle");
+siteTitle.addEventListener("click", resetAll);
+siteTitle.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        resetAll();
+    }
+});
 
 
 /* =========================================================
