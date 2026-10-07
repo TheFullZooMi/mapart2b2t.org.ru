@@ -1169,12 +1169,6 @@ header {
 .link-card:hover { transform: translateY(-2px); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--glass)); }
 .link-card-title { font-weight: 700; font-size: 14px; }
 .link-card-text { font-size: 12px; color: var(--muted); line-height: 1.45; }
-.link-card.disabled { opacity: .6; cursor: default; pointer-events: none; }
-.link-soon {
-    margin-left: 6px; padding: 2px 8px;
-    border-radius: 99px; font-style: normal; font-size: 10px; font-weight: 700;
-    background: color-mix(in srgb, var(--accent) 25%, transparent);
-}
 
 /* ---------- Панель фильтров ---------- */
 .filters-bar {
@@ -1588,6 +1582,33 @@ body { overflow-x: clip; }
     .big-card:hover, .small-card:hover { transform: none; }
     .big-card:hover img, .small-card:hover img { transform: none; }
 }
+/* ---------- Жучок "сообщить об ошибке" ---------- */
+.site-foot {
+    max-width: 1800px;
+    margin: 6px auto 0;
+    padding: 0 6px 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+.bug-button {
+    width: 34px; height: 34px;
+    padding: 6px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    opacity: .1;
+    cursor: pointer;
+    transition: opacity .35s ease, transform .35s ease, color .35s ease;
+}
+.bug-button svg { width: 100%; height: 100%; display: block; }
+.bug-button:hover, .bug-button:focus-visible {
+    opacity: .9;
+    color: var(--accent);
+    transform: rotate(-14deg) scale(1.15);
+}
+.bug-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: none) { .bug-button { opacity: .16; } }
 </style>
 
 </head>
@@ -1619,7 +1640,6 @@ body { overflow-x: clip; }
         <div class="info-actions">
             <button class="info-button" id="guideButton" type="button">Как пользоваться</button>
             <a class="info-button" id="discordButton" href="https://discord.gg/WtbDHWTtYU" target="_blank" rel="noopener">Discord мап-артов</a>
-            <button class="info-button" id="linksButton" type="button">Полезное</button>
             <button class="info-button" id="authorsButton" type="button">Топ авторов</button>
             <button class="info-button" id="sourceButton" type="button">Об источнике данных</button>
         </div>
@@ -1836,6 +1856,24 @@ body { overflow-x: clip; }
 </section>
 
 
+<footer class="site-foot">
+    <button type="button" class="bug-button" id="bugButton" aria-label="Сообщить об ошибке" title="Нашли ошибку?">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <ellipse cx="12" cy="14" rx="4.6" ry="6"></ellipse>
+            <path d="M9.2 8.6a2.8 2.8 0 0 1 5.6 0"></path>
+            <path d="M12 8.2v11.6"></path>
+            <path d="M7.4 12.2 4 10.6"></path>
+            <path d="M7.4 15.4 3.8 15.4"></path>
+            <path d="M8 18.6 5 20.6"></path>
+            <path d="M16.6 12.2 20 10.6"></path>
+            <path d="M16.6 15.4 20.2 15.4"></path>
+            <path d="M16 18.6 19 20.6"></path>
+            <path d="M10 5.6 8.6 3.4"></path>
+            <path d="M14 5.6 15.4 3.4"></path>
+        </svg>
+    </button>
+</footer>
+
 <!-- =========================================================
      INFO MODALS
      ========================================================= -->
@@ -1852,26 +1890,16 @@ body { overflow-x: clip; }
     </div>
 </div>
 
-<div class="info-modal" id="linksModal">
+<div class="info-modal" id="reportModal">
     <div class="info-modal-content">
-        <button class="info-modal-close" data-close="linksModal">×</button>
-        <h3>Полезное</h3>
-        <p class="authors-sub">Всё, что нужно, чтобы построить свой мап-арт.</p>
+        <button class="info-modal-close" data-close="reportModal">×</button>
+        <h3>Нашли ошибку?</h3>
+        <p class="authors-sub">Если на сайте неверная информация (автор, дата, размер) или не то изображение, напишите мне, я исправлю.</p>
 
-        <a class="link-card" data-link="guide" target="_blank" rel="noopener">
-            <span class="link-card-title">Гайд по строительству <em class="link-soon">скоро</em></span>
-            <span class="link-card-text">Как построить мап-арт: от подготовки до результата.</span>
-        </a>
+        <div id="contactList"></div>
 
-        <a class="link-card" data-link="builder" target="_blank" rel="noopener">
-            <span class="link-card-title">Конструктор мап-артов</span>
-            <span class="link-card-text">Сайт Mapkluss, где можно собрать свой арт.</span>
-        </a>
-
-        <a class="link-card" data-link="resources" target="_blank" rel="noopener">
-            <span class="link-card-title">Как получить ресурсы</span>
-            <span class="link-card-text">Пост в Discord про добычу всего необходимого для строительства.</span>
-        </a>
+        <button type="button" class="authors-more" id="reportTemplate">Скопировать шаблон сообщения</button>
+        <p class="authors-sub" id="reportNote" style="margin-top:8px"></p>
     </div>
 </div>
 
@@ -3675,32 +3703,6 @@ document.getElementById("randomButton").addEventListener("click", function() {
 });
 
 /* =========================================================
-   ПОЛЕЗНОЕ (ссылки)
-   ========================================================= */
-
-const USEFUL_LINKS = {
-    guide: "",   // <-- сюда позже вставь ссылку на гайд по строительству
-    builder: "https://mapkluss.art/",
-    resources: "https://discord.com/channels/1488510570687627475/1488907061344469194/1550035353606430771"
-};
-
-document.querySelectorAll("[data-link]").forEach(function(card) {
-    const url = USEFUL_LINKS[card.dataset.link];
-    if (url) {
-        card.href = url;
-        const soon = card.querySelector(".link-soon");
-        if (soon) soon.remove();
-    } else {
-        card.removeAttribute("href");
-        card.classList.add("disabled");
-    }
-});
-
-document.getElementById("linksButton").addEventListener("click", function() {
-    document.getElementById("linksModal").classList.add("active");
-});
-
-/* =========================================================
    ВКЛАДКИ: АВТОРЫ / СТАТИСТИКА
    ========================================================= */
 
@@ -3831,6 +3833,70 @@ siteTitle.addEventListener("keydown", function(event) {
         event.preventDefault();
         resetAll();
     }
+});
+
+
+/* =========================================================
+   СООБЩИТЬ ОБ ОШИБКЕ (жучок внизу страницы)
+   ========================================================= */
+
+// Контакты для связи. Чтобы добавить ещё один, скопируйте строку.
+//   value — что показать и скопировать по клику, url — необязательная ссылка (https://t.me/..., mailto:...)
+const CONTACTS = [
+    { label: "Discord", value: "@thefullzoomi" }
+];
+
+const reportModal = document.getElementById("reportModal");
+const contactList = document.getElementById("contactList");
+const reportNote = document.getElementById("reportNote");
+
+function renderContacts() {
+    contactList.textContent = "";
+
+    CONTACTS.forEach(function(contact) {
+        const card = document.createElement(contact.url ? "a" : "button");
+        card.className = "link-card";
+        if (contact.url) {
+            card.href = contact.url;
+            if (/^https?:/i.test(contact.url)) { card.target = "_blank"; card.rel = "noopener"; }
+        } else {
+            card.type = "button";
+            card.style.textAlign = "left";
+            card.style.font = "inherit";
+            card.addEventListener("click", function() {
+                navigator.clipboard.writeText(contact.value).then(function() {
+                    reportNote.textContent = "«" + contact.value + "» скопировано ✓";
+                });
+            });
+        }
+
+        const title = document.createElement("span");
+        title.className = "link-card-title";
+        title.textContent = contact.label;
+        const text = document.createElement("span");
+        text.className = "link-card-text";
+        text.textContent = contact.value + (contact.url ? "" : " · нажмите, чтобы скопировать");
+        card.append(title, text);
+        contactList.appendChild(card);
+    });
+}
+
+document.getElementById("bugButton").addEventListener("click", function() {
+    renderContacts();
+    reportNote.textContent = "";
+    reportModal.classList.add("active");
+});
+
+document.getElementById("reportTemplate").addEventListener("click", function() {
+    const last = viewerCtx && viewerCtx.current;
+    const lines = [
+        "Ошибка на сайте: " + window.location.origin + window.location.pathname,
+        last ? "Арт: " + last.id + " (" + (splitAuthors(last.author).join(", ") || "автор не указан") + ", " + last.date + ")" : "Арт: ",
+        "Что не так: "
+    ];
+    navigator.clipboard.writeText(lines.join("\n")).then(function() {
+        reportNote.textContent = "Шаблон скопирован — вставьте его в сообщение ✓";
+    });
 });
 
 
