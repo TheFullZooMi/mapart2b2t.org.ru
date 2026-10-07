@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Добавить мап-арты · помощник</title>
+
+<style>
+:root {
+    --bg: #101522;
+    --container: #1b2436;
+    --card: #232f45;
+    --field: #141b2b;
+    --text: #eef2fb;
+    --muted: #97a3bd;
+    --border: rgba(255,255,255,.12);
+    --accent: #8aa4d6;
+    --good: #5fd08a;
+    --warn: #f0b24a;
+    --bad: #ef6b73;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+    min-height: 100vh;
+    background: radial-gradient(1200px 600px at 20% -10%, #1d2a49 0%, var(--bg) 60%);
+    color: var(--text);
+    font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    padding: 24px 16px 80px;
+    overflow-x: clip;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+h1 { margin: 0 0 4px; font-size: 24px; }
+.sub { margin: 0 0 20px; color: var(--muted); }
+a { color: var(--accent); }
+
+.panel {
+    background: var(--container);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.panel h2 { margin: 0 0 10px; font-size: 15px; }
+
+.status { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.pill {
+    padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--border); background: var(--field); color: var(--muted);
+}
+.pill.ok { color: var(--good); border-color: color-mix(in srgb, var(--good) 50%, transparent); }
+.pill.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 50%, transparent); }
+
+button, .btn {
+    font: inherit; font-size: 13px; font-weight: 650;
+    padding: 8px 14px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+}
+button:hover, .btn:hover { border-color: var(--accent); }
+button.primary, .btn.primary {
+    background: color-mix(in srgb, var(--accent) 30%, var(--card));
+    border-color: var(--accent);
+}
+button:disabled { opacity: .45; cursor: not-allowed; }
+
+label.field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); min-width: 0; }
+input[type=text], input[type=month], input[type=number], select, textarea {
+    font: inherit; font-size: 14px; color: var(--text);
+    background: var(--field); border: 1px solid var(--border); border-radius: 9px;
+    padding: 8px 10px; width: 100%; min-width: 0; outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--accent); }
+.check { display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 13px; }
+
+.defaults { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end; }
+
+.drop {
+    border: 2px dashed var(--border); border-radius: 16px;
+    padding: 30px 16px; text-align: center; color: var(--muted);
+    cursor: pointer; transition: border-color .2s, background .2s;
+}
+.drop.over, .drop:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.drop b { color: var(--text); }
+
+.items { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.item {
+    display: grid; grid-template-columns: 150px 1fr; gap: 14px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px;
+}
+.thumb {
+    width: 150px; height: 150px; border-radius: 10px; background: var(--field);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.thumb img { max-width: 100%; max-height: 100%; display: block; }
+.fields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; min-width: 0; }
+.fields .wide { grid-column: 1 / -1; }
+.meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); align-items: center; }
+.meta b { color: var(--text); font-weight: 650; }
+.meta .warn { color: var(--warn); }
+.meta .bad { color: var(--bad); }
+.suggest { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; min-height: 0; }
+.chip {
+    padding: 2px 9px; font-size: 12px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--field); color: var(--text);
+}
+.chip:hover { border-color: var(--accent); }
+.remove { margin-left: auto; padding: 4px 10px; font-size: 12px; }
+
+pre {
+    margin: 0; padding: 12px; background: var(--field); border: 1px solid var(--border);
+    border-radius: 10px; overflow: auto; max-height: 260px; font-size: 12px; line-height: 1.5;
+}
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; align-items: center; }
+.hint { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+ol.steps { margin: 6px 0 0; padding-left: 20px; }
+ol.steps li { margin: 4px 0; }
+.err { color: var(--bad); }
+[hidden] { display: none !important; }
+
+@media (max-width: 720px) {
+    .defaults { grid-template-columns: 1fr 1fr; }
+    .defaults .wideM { grid-column: 1 / -1; }
+    .item { grid-template-columns: 1fr; }
+    .thumb { width: 100%; height: 180px; }
+    .fields { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+    <h1>Добавить мап-арты</h1>
+    <p class="sub">Помощник для владельца сайта. Перетащите PNG, заполните данные, скачайте готовые файлы и загрузите их в репозиторий. <a href="index.html">← к галерее</a></p>
+
+    <!-- ===== Состояние базы ===== -->
+    <section class="panel">
+        <h2>1. База данных</h2>
+        <div class="status">
+            <span class="pill" id="dbStatus">data.json не загружен</span>
+            <button type="button" id="dbPick">Выбрать data.json вручную</button>
+            <input type="file" id="dbFile" accept=".json,application/json" hidden>
+        </div>
+        <p class="hint">Страница пытается прочитать <code>data.json</code> рядом с собой. Если открыта не с сайта (а как файл с компьютера), выберите его вручную: от него зависят следующие номера и подсказки ников.</p>
+    </section>
+
+    <!-- ===== Значения по умолчанию ===== -->
+    <section class="panel">
+        <h2>2. Значения для новых файлов</h2>
+        <div class="defaults">
+            <label class="field wideM">Автор(ы) через запятую
+                <input type="text" id="defAuthor" placeholder="ник1, ник2" autocomplete="off">
+            </label>
+            <label class="field">Дата
+                <input type="month" id="defDate">
+            </label>
+            <label class="field">Пикселей на карту
+                <input type="number" id="ppm" value="128" min="1" step="1">
+            </label>
+            <label class="check wideM"><input type="checkbox" id="defNsfw"> 18+</label>
+        </div>
+        <p class="hint">Эти значения подставляются в каждый новый файл, потом их можно поменять в карточке. «Пикселей на карту» нужно для определения размера: в обычном PNG карта 128×128, то есть арт 4×3 имеет размер 512×384.</p>
+    </section>
+
+    <!-- ===== Файлы ===== -->
+    <section class="panel">
+        <h2>3. Изображения</h2>
+        <div class="drop" id="drop">
+            <div><b>Перетащите PNG сюда</b> или нажмите, чтобы выбрать</div>
+            <div class="hint">Можно сразу несколько файлов</div>
+        </div>
+        <input type="file" id="files" accept="image/png,image/*" multiple hidden>
+        <div class="items" id="items"></div>
+    </section>
+
+    <!-- ===== Результат ===== -->
+    <section class="panel" id="resultPanel" hidden>
+        <h2>4. Результат</h2>
+
+        <div id="problems" class="hint err"></div>
+
+        <h3 style="margin:14px 0 6px;font-size:13px">Файлы для папки <code>maps</code></h3>
+        <div class="row" id="fileButtons"></div>
+
+        <h3 style="margin:14px 0 6px;font-size:13px">Готовый <code>data.json</code></h3>
+        <div class="row">
+            <button type="button" class="primary" id="dlJson">Скачать data.json</button>
+            <button type="button" id="copyJson">Скопировать весь JSON</button>
+        </div>
+        <p class="hint" id="jsonNote"></p>
+
+        <h3 style="margin:14px 0 6px;font-size:13px">Или только новые записи (вставить вручную)</h3>
+        <pre id="snippet"></pre>
+        <div class="row"><button type="button" id="copySnippet">Скопировать записи</button></div>
+        <p class="hint" id="snippetNote"></p>
+
+        <h3 style="margin:18px 0 6px;font-size:13px">Что делать дальше</h3>
+        <ol class="steps">
+            <li>В репозитории откройте папку <code>maps</code> → <b>Add file → Upload files</b>, перетащите скачанные PNG → <b>Commit changes</b>.</li>
+            <li>В корне репозитория загрузите скачанный <code>data.json</code> тем же способом, он заменит старый. Либо вставьте скопированные записи в нужный список вручную.</li>
+            <li>Через минуту обновите сайт (<code>Ctrl+F5</code>).</li>
+        </ol>
+    </section>
+
+</div>
+
+<script>
+/* =========================================================
+   СОСТОЯНИЕ
+   ========================================================= */
+
+let db = null;                 // { bigMaps: [], smallMaps: [] }
+let knownAuthors = [];         // [{name, count}]
+const items = [];              // добавленные файлы
+let uid = 0;
+
+const $ = function(id) { return document.getElementById(id); };
+
+const dbStatus = $("dbStatus");
+const itemsEl = $("items");
+
+function currentMonth() {
+    const d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+}
+$("defDate").value = currentMonth();
+
+/* =========================================================
+   ЗАГРУЗКА data.json
+   ========================================================= */
+
+function splitAuthors(value) {
+    return String(value || "").split(",")
+        .map(function(n) { return n.trim(); })
+        .filter(function(n) { return n && n !== "-"; });
+}
+
+function setDb(data, label) {
+    if (!data || !Array.isArray(data.bigMaps) || !Array.isArray(data.smallMaps)) {
+        throw new Error("в файле нет списков bigMaps и smallMaps");
+    }
+    db = data;
+
+    const counts = new Map();
+    db.bigMaps.concat(db.smallMaps).forEach(function(map) {
+        splitAuthors(map.author).forEach(function(name) {
+            const key = name.toLowerCase();
+            if (!counts.has(key)) counts.set(key, { name: name, count: 0 });
+            counts.get(key).count++;
+        });
+    });
+    knownAuthors = Array.from(counts.values()).sort(function(a, b) { return b.count - a.count; });
+
+    dbStatus.textContent = label + ": крупных " + db.bigMaps.length + ", мелких " + db.smallMaps.length;
+    dbStatus.className = "pill ok";
+    refreshAll();
+}
+
+function nextNumbers() {
+    const num = function(id) {
+        const m = String(id).match(/(\d+)\s*$/);
+        return m ? parseInt(m[1], 10) : 0;
+    };
+    const bigMax = db ? Math.max(0, ...db.bigMaps.map(function(m) { return num(m.id); })) : 0;
+    const smallMax = db ? Math.max(0, ...db.smallMaps.map(function(m) { return num(m.id); })) : 0;
+    return { big: bigMax + 1, small: smallMax + 1 };
+}
+
+async function autoLoad() {
+    try {
+        const response = await fetch("data.json?cache=" + Date.now());
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        setDb(await response.json(), "data.json с сайта");
+    } catch (error) {
+        dbStatus.textContent = "data.json не найден — выберите вручную";
+        dbStatus.className = "pill warn";
+    }
+}
+
+$("dbPick").addEventListener("click", function() { $("dbFile").click(); });
+$("dbFile").addEventListener("change", function() {
+    const file = $("dbFile").files[0];
+    if (!file) return;
+    file.text().then(function(text) {
+        setDb(JSON.parse(text), "data.json из файла");
+    }).catch(function(error) {
+        dbStatus.textContent = "Не удалось прочитать: " + error.message;
+        dbStatus.className = "pill warn";
+    });
+});
+
+/* =========================================================
+   ДОБАВЛЕНИЕ ФАЙЛОВ
+   ========================================================= */
+
+const drop = $("drop");
+drop.addEventListener("click", function() { $("files").click(); });
+["dragenter", "dragover"].forEach(function(name) {
+    drop.addEventListener(name, function(event) { event.preventDefault(); drop.classList.add("over"); });
+});
+["dragleave", "drop"].forEach(function(name) {
+    drop.addEventListener(name, function(event) { event.preventDefault(); drop.classList.remove("over"); });
+});
+drop.addEventListener("drop", function(event) { addFiles(event.dataTransfer.files); });
+$("files").addEventListener("change", function() { addFiles($("files").files); $("files").value = ""; });
+
+// вставка из буфера (Ctrl+V со скриншотом или файлом)
+document.addEventListener("paste", function(event) {
+    const files = Array.from(event.clipboardData.files || []).filter(function(f) { return f.type.startsWith("image/"); });
+    if (files.length) addFiles(files);
+});
+
+function addFiles(fileList) {
+    Array.from(fileList).forEach(function(file) {
+        if (!file.type.startsWith("image/")) return;
+
+        const item = {
+            uid: ++uid,
+            file: file,
+            url: URL.createObjectURL(file),
+            width: 0, height: 0,
+            author: $("defAuthor").value.trim(),
+            date: $("defDate").value || currentMonth(),
+            title: "",
+            nsfw: $("defNsfw").checked,
+            sizeOverride: ""
+        };
+        items.push(item);
+
+        const probe = new Image();
+        probe.onload = function() {
+            item.width = probe.naturalWidth;
+            item.height = probe.naturalHeight;
+            refreshAll();
+        };
+        probe.src = item.url;
+    });
+    refreshAll();
+}
+
+/* =========================================================
+   РАСЧЁТ
+   ========================================================= */
+
+function detectSize(item) {
+    const ppm = Math.max(1, parseInt($("ppm").value, 10) || 128);
+    if (item.sizeOverride) {
+        const m = item.sizeOverride.match(/^\s*(\d+)\s*[xх×*]\s*(\d+)\s*$/i);
+        if (m) return { w: +m[1], h: +m[2], exact: true, manual: true };
+        return null;
+    }
+    if (!item.width) return null;
+    return {
+        w: Math.max(1, Math.round(item.width / ppm)),
+        h: Math.max(1, Math.round(item.height / ppm)),
+        exact: item.width % ppm === 0 && item.height % ppm === 0,
+        manual: false
+    };
+}
+
+function compute() {
+    const next = nextNumbers();
+    let big = next.big, small = next.small;
+    const out = [];
+
+    items.forEach(function(item) {
+        const size = detectSize(item);
+        const result = { item: item, size: size, problems: [], warnings: [] };
+
+        if (!size) {
+            result.problems.push(item.sizeOverride ? "Размер указан неверно (нужен вид 4x3)" : "Размер картинки ещё не определён");
+            out.push(result);
+            return;
+        }
+
+        const isSmall = size.w === 1 && size.h === 1;
+        result.isSmall = isSmall;
+
+        if (isSmall) {
+            result.id = "ma-" + small;
+            result.fileName = small + ".png";
+            small++;
+        } else {
+            result.id = "ma-" + String(big).padStart(6, "0");
+            result.fileName = result.id + ".png";
+            big++;
+        }
+
+        if (!size.exact) result.warnings.push("Размер картинки (" + item.width + "×" + item.height + ") не кратен " + ($("ppm").value || 128) + " px — проверьте размер");
+        if (!splitAuthors(item.author).length) result.warnings.push("Автор не указан (на сайте будет «Неизвестный автор»)");
+        if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(item.date)) result.problems.push("Дата должна быть вида ГГГГ-ММ");
+
+        result.entry = {
+            id: result.id,
+            author: item.author.trim() || "-",
+            title: item.title.trim() || (isSmall ? "" : "-"),
+            date: item.date,
+            size: size.w + "x" + size.h,
+            ratio: size.w + " / " + size.h,
+            image: "maps/" + result.fileName,
+            nsfw: !!item.nsfw
+        };
+
+        out.push(result);
+    });
+    return out;
+}
+
+/* =========================================================
+   ОТРИСОВКА
+   ========================================================= */
+
+function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function(key) {
+        if (key === "text") node.textContent = attrs[key];
+        else if (key === "class") node.className = attrs[key];
+        else node.setAttribute(key, attrs[key]);
+    });
+    (children || []).forEach(function(child) { node.appendChild(child); });
+    return node;
+}
+
+function field(label, input, cls) {
+    return el("label", { class: "field " + (cls || "") }, [document.createTextNode(label), input]);
+}
+
+let lastResults = [];
+
+function refreshAll() {
+    lastResults = compute();
+    renderItems();
+    renderResult();
+}
+
+// обновление без перерисовки полей (чтобы не терять фокус при вводе)
+function refreshLight() {
+    lastResults = compute();
+    updateMeta();
+    renderResult();
+}
+
+function renderItems() {
+    itemsEl.textContent = "";
+    items.forEach(function(item, index) {
+        const card = el("div", { class: "item", "data-uid": item.uid });
+
+        const thumb = el("div", { class: "thumb" }, [el("img", { src: item.url, alt: "" })]);
+
+        const authorInput = el("input", { type: "text", value: item.author, placeholder: "ник1, ник2", autocomplete: "off" });
+        const suggest = el("div", { class: "suggest" });
+        function showSuggest() {
+            suggest.textContent = "";
+            const parts = authorInput.value.split(",");
+            const token = parts[parts.length - 1].trim().toLowerCase();
+            const used = new Set(splitAuthors(authorInput.value).map(function(n) { return n.toLowerCase(); }));
+            knownAuthors.filter(function(a) {
+                return !used.has(a.name.toLowerCase()) && (token ? a.name.toLowerCase().indexOf(token) !== -1 : false);
+            }).slice(0, 6).forEach(function(a) {
+                const chip = el("span", { class: "chip", text: a.name });
+                chip.addEventListener("mousedown", function(event) {
+                    event.preventDefault();
+                    parts[parts.length - 1] = (parts.length > 1 ? " " : "") + a.name;
+                    authorInput.value = parts.join(",");
+                    item.author = authorInput.value;
+                    showSuggest();
+                    refreshLight();
+                });
+                suggest.appendChild(chip);
+            });
+        }
+        authorInput.addEventListener("input", function() { item.author = authorInput.value; showSuggest(); refreshLight(); });
+        authorInput.addEventListener("blur", function() { suggest.textContent = ""; });
+
+        const dateInput = el("input", { type: "month", value: item.date });
+        dateInput.addEventListener("input", function() { item.date = dateInput.value; refreshLight(); });
+
+        const sizeInput = el("input", { type: "text", placeholder: "авто", value: item.sizeOverride });
+        sizeInput.addEventListener("input", function() { item.sizeOverride = sizeInput.value; refreshLight(); });
+
+        const titleInput = el("input", { type: "text", value: item.title, placeholder: "необязательно" });
+        titleInput.addEventListener("input", function() { item.title = titleInput.value; refreshLight(); });
+
+        const nsfw = el("input", { type: "checkbox" });
+        nsfw.checked = item.nsfw;
+        nsfw.addEventListener("change", function() { item.nsfw = nsfw.checked; refreshLight(); });
+        const nsfwLabel = el("label", { class: "check" }, [nsfw, document.createTextNode("18+")]);
+
+        const remove = el("button", { type: "button", class: "remove", text: "Убрать" });
+        remove.addEventListener("click", function() {
+            URL.revokeObjectURL(item.url);
+            items.splice(index, 1);
+            refreshAll();
+        });
+
+        const meta = el("div", { class: "meta" });
+        meta.dataset.meta = item.uid;
+        meta.appendChild(remove);
+
+        const authorField = field("Автор(ы)", authorInput, "wide");
+        authorField.appendChild(suggest);
+
+        const fields = el("div", { class: "fields" }, [
+            authorField,
+            field("Дата", dateInput),
+            field("Размер (напр. 4x3)", sizeInput),
+            field("Название", titleInput),
+            el("div", { class: "field", style: "justify-content:flex-end" }, [nsfwLabel]),
+            meta
+        ]);
+
+        card.appendChild(thumb);
+        card.appendChild(fields);
+        itemsEl.appendChild(card);
+    });
+    updateMeta();
+}
+
+function updateMeta() {
+    lastResults.forEach(function(result) {
+        const meta = document.querySelector('[data-meta="' + result.item.uid + '"]');
+        if (!meta) return;
+        const remove = meta.querySelector(".remove");
+        meta.textContent = "";
+
+        const parts = [];
+        if (result.size) {
+            parts.push(["Размер: ", result.size.w + "×" + result.size.h + (result.size.manual ? " (вручную)" : "")]);
+            parts.push(["Раздел: ", result.isSmall ? "мелкие" : "крупные"]);
+            parts.push(["ID: ", result.id]);
+            parts.push(["Файл: ", "maps/" + result.fileName]);
+        }
+        if (result.item.width) parts.push(["Пикселей: ", result.item.width + "×" + result.item.height]);
+
+        parts.forEach(function(p) {
+            meta.appendChild(el("span", {}, [document.createTextNode(p[0]), el("b", { text: p[1] })]));
+        });
+        result.warnings.forEach(function(w) { meta.appendChild(el("span", { class: "warn", text: "⚠ " + w })); });
+        result.problems.forEach(function(w) { meta.appendChild(el("span", { class: "bad", text: "✖ " + w })); });
+        meta.appendChild(remove);
+    });
+}
+
+function download(blob, name) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+
+function buildJson(results) {
+    const base = db ? JSON.parse(JSON.stringify(db)) : { bigMaps: [], smallMaps: [] };
+    results.forEach(function(r) {
+        (r.isSmall ? base.smallMaps : base.bigMaps).push(r.entry);
+    });
+    return JSON.stringify(base, null, 4) + "\n";
+}
+
+function buildSnippets(results) {
+    const bigs = results.filter(function(r) { return !r.isSmall; }).map(function(r) { return r.entry; });
+    const smalls = results.filter(function(r) { return r.isSmall; }).map(function(r) { return r.entry; });
+    const format = function(list) {
+        return list.map(function(e) { return JSON.stringify(e, null, 4).replace(/^/gm, "        "); }).join(",\n");
+    };
+    let text = "";
+    if (bigs.length) text += '// добавить в конец списка "bigMaps" (после последней записи поставьте запятую):\n' + format(bigs) + "\n";
+    if (smalls.length) text += (text ? "\n" : "") + '// добавить в конец списка "smallMaps":\n' + format(smalls) + "\n";
+    return text;
+}
+
+function renderResult() {
+    const panel = $("resultPanel");
+    const ready = lastResults.filter(function(r) { return r.entry; });
+    panel.hidden = !items.length;
+    if (!items.length) return;
+
+    const blocking = lastResults.filter(function(r) { return r.problems.length || !r.entry; });
+    $("problems").textContent = blocking.length
+        ? "Исправьте ошибки (✖) в карточках, пока они есть, готовые файлы могут быть неверными."
+        : "";
+
+    const buttons = $("fileButtons");
+    buttons.textContent = "";
+    ready.forEach(function(r) {
+        const b = el("button", { type: "button", text: "⬇ " + r.fileName });
+        b.addEventListener("click", function() { download(r.item.file, r.fileName); });
+        buttons.appendChild(b);
+    });
+    if (ready.length > 1) {
+        const all = el("button", { type: "button", class: "primary", text: "Скачать все файлы (" + ready.length + ")" });
+        all.addEventListener("click", function() {
+            ready.forEach(function(r, i) { setTimeout(function() { download(r.item.file, r.fileName); }, i * 350); });
+        });
+        buttons.insertBefore(all, buttons.firstChild);
+    }
+
+    $("dlJson").disabled = !ready.length;
+    $("copyJson").disabled = !ready.length;
+    $("jsonNote").textContent = db
+        ? "Это текущий data.json плюс новые записи: " + ready.length + "."
+        : "data.json не загружен, в файл попадут только новые записи. Лучше сначала выбрать data.json в шаге 1.";
+    $("snippet").textContent = buildSnippets(ready);
+    $("snippetNote").textContent = "";
+}
+
+$("dlJson").addEventListener("click", function() {
+    const ready = lastResults.filter(function(r) { return r.entry; });
+    download(new Blob([buildJson(ready)], { type: "application/json" }), "data.json");
+});
+
+function copyText(text, note) {
+    navigator.clipboard.writeText(text).then(function() {
+        note.textContent = "Скопировано ✓";
+        setTimeout(function() { note.textContent = ""; }, 1800);
+    });
+}
+$("copyJson").addEventListener("click", function() {
+    const ready = lastResults.filter(function(r) { return r.entry; });
+    copyText(buildJson(ready), $("jsonNote"));
+});
+$("copySnippet").addEventListener("click", function() {
+    const ready = lastResults.filter(function(r) { return r.entry; });
+    copyText(buildSnippets(ready), $("snippetNote"));
+});
+
+// изменение общих значений сразу меняет расчёт
+$("ppm").addEventListener("input", refreshLight);
+
+autoLoad();
+</script>
+</body>
+</html>
