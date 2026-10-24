@@ -459,6 +459,26 @@
             "ratio": "3 / 3",
             "image": "maps/ma-000046.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-000047",
+            "author": "keglua, nikifaq",
+            "title": "-",
+            "date": "2023-06",
+            "size": "2x1",
+            "ratio": "2 / 1",
+            "image": "maps/ma-000047.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-000048",
+            "author": "BLODI, Xomep, Drachentoter",
+            "title": "-",
+            "date": "2024-07",
+            "size": "1x2",
+            "ratio": "1 / 2",
+            "image": "maps/ma-000048.png",
+            "nsfw": true
         }
     ],
     "smallMaps": [
@@ -2150,6 +2170,446 @@
             "size": "1x1",
             "ratio": "1 / 1",
             "image": "maps/169.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-170",
+            "author": "Oduvanchik, Lamnorka",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/170.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-171",
+            "author": "Fisher, gR0m0v3pg3c",
+            "title": "",
+            "date": "2024-01",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/171.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-172",
+            "author": "Dosia, marunara9",
+            "title": "",
+            "date": "2023-05",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/172.png",
+            "nsfw": true
+        },
+        {
+            "id": "ma-173",
+            "author": "K1GC",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/173.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-174",
+            "author": "akiro",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/174.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-175",
+            "author": "Twedis, MoonWhisper",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/175.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-176",
+            "author": "Twedis, MoonWhisper",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/176.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-177",
+            "author": "Dudu",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/177.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-178",
+            "author": "Dudu",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/178.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-179",
+            "author": "X_DARK_X",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/179.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-180",
+            "author": "alt_150X",
+            "title": "",
+            "date": "2024-06",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/180.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-181",
+            "author": "Mixik666",
+            "title": "",
+            "date": "2023-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/181.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-182",
+            "author": "develss_",
+            "title": "",
+            "date": "2023-06",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/182.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-183",
+            "author": "MoonWhisper",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/183.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-184",
+            "author": "-",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/184.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-185",
+            "author": "frog12",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/185.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-186",
+            "author": "Dudu, X_DARK_X",
+            "title": "",
+            "date": "2024-03",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/186.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-187",
+            "author": "Mixik666",
+            "title": "",
+            "date": "2023-03",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/187.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-188",
+            "author": "_tord_000_",
+            "title": "",
+            "date": "2023-09",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/188.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-189",
+            "author": "anus_fermera37",
+            "title": "",
+            "date": "2024-03",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/189.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-190",
+            "author": "Drachentoter",
+            "title": "",
+            "date": "2025-02",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/190.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-191",
+            "author": "GypMaH123333",
+            "title": "",
+            "date": "2023-09",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/191.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-192",
+            "author": "vethaer",
+            "title": "",
+            "date": "2025-03",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/192.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-193",
+            "author": "alt_150X",
+            "title": "",
+            "date": "2024-08",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/193.png",
+            "nsfw": true
+        },
+        {
+            "id": "ma-194",
+            "author": "Fisher",
+            "title": "",
+            "date": "2023-06",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/194.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-195",
+            "author": "alt_150X",
+            "title": "",
+            "date": "2025-03",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/195.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-196",
+            "author": "Mile_2780",
+            "title": "",
+            "date": "2025-05",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/196.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-197",
+            "author": "Neoruzzz",
+            "title": "",
+            "date": "2023-08",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/197.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-198",
+            "author": "Pvp_KaBa4ok",
+            "title": "",
+            "date": "2023-12",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/198.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-199",
+            "author": "CrystalPvPW3nner, amoggles",
+            "title": "",
+            "date": "2025-07",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/199.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-200",
+            "author": "-",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/200.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-201",
+            "author": "We1ix",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/201.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-202",
+            "author": "loolus",
+            "title": "",
+            "date": "2025-01",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/202.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-203",
+            "author": "RononoaZoro",
+            "title": "",
+            "date": "2025-03",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/203.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-204",
+            "author": "X9O2",
+            "title": "",
+            "date": "2024-08",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/204.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-205",
+            "author": "vethaer",
+            "title": "",
+            "date": "2025-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/205.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-206",
+            "author": "-",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/206.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-207",
+            "author": "-",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/207.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-208",
+            "author": "ARWYX, Crydiaa, Snower_",
+            "title": "",
+            "date": "2024-09",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/208.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-209",
+            "author": "-",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/209.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-210",
+            "author": "ARWYX, karatel148, dambo4ek, Ninjago_TOP, COUNIST_USSR, Kriperinq",
+            "title": "",
+            "date": "2023-08",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/210.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-211",
+            "author": "beka, Slame_228",
+            "title": "",
+            "date": "2023-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/211.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-212",
+            "author": "-",
+            "title": "",
+            "date": "2022-04",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/212.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-213",
+            "author": "KD20",
+            "title": "",
+            "date": "2024-08",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/213.png",
             "nsfw": false
         }
     ]
