@@ -549,6 +549,16 @@
             "ratio": "2 / 2",
             "image": "maps/ma-000055.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-000056",
+            "author": "Vladvortex",
+            "title": "-",
+            "date": "2026-10",
+            "size": "13x4",
+            "ratio": "13 / 4",
+            "image": "maps/ma-000056.png",
+            "nsfw": false
         }
     ],
     "smallMaps": [
@@ -2910,6 +2920,26 @@
             "size": "1x1",
             "ratio": "1 / 1",
             "image": "maps/236.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-237",
+            "author": "_ushina",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/237.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-238",
+            "author": "gazon",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/238.png",
             "nsfw": false
         }
     ]
