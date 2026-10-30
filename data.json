@@ -3201,6 +3201,36 @@
             "ratio": "1 / 1",
             "image": "maps/257.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-258",
+            "author": "Anton_3827",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/258.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-259",
+            "author": "Anton_3827",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/259.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-260",
+            "author": "_n0nam3_",
+            "title": "",
+            "date": "2026-10",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/260.png",
+            "nsfw": false
         }
     ]
 }
