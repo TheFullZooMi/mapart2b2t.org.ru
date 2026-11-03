@@ -195,9 +195,12 @@ button.danger:hover { border-color: var(--bad); background: color-mix(in srgb, v
             <label class="field">Пикселей на карту
                 <input type="number" id="ppm" value="128" min="1" step="1">
             </label>
-            <label class="check wideM"><input type="checkbox" id="defNsfw"> 18+</label>
+            <div class="wideM" style="display:flex;flex-direction:column;gap:6px">
+                <label class="check"><input type="checkbox" id="defNoDate"> Без даты</label>
+                <label class="check"><input type="checkbox" id="defNsfw"> 18+</label>
+            </div>
         </div>
-        <p class="hint">Эти значения подставляются в каждый новый файл, потом их можно поменять в карточке. «Пикселей на карту» нужно для определения размера: в обычном PNG карта 128×128, то есть арт 4×3 имеет размер 512×384.</p>
+        <p class="hint">Эти значения подставляются в каждый новый файл, потом их можно поменять в карточке. Если дата не нужна, отметьте «Без даты» (или оставьте поле пустым): в базу запишется <code>0000-00</code>. «Пикселей на карту» нужно для определения размера: в обычном PNG карта 128×128, то есть арт 4×3 имеет размер 512×384.</p>
     </section>
 
     <!-- ===== Файлы ===== -->
@@ -292,6 +295,7 @@ function currentMonth() {
     return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
 }
 $("defDate").value = currentMonth();
+$("defNoDate").addEventListener("change", function() { $("defDate").disabled = $("defNoDate").checked; });
 
 /* =========================================================
    ЗАГРУЗКА data.json
@@ -392,7 +396,7 @@ function addFiles(fileList) {
             url: URL.createObjectURL(file),
             width: 0, height: 0,
             author: $("defAuthor").value.trim(),
-            date: $("defDate").value || currentMonth(),
+            date: $("defNoDate").checked ? "" : $("defDate").value,   // пусто = без даты
             title: "",
             nsfw: $("defNsfw").checked,
             sizeOverride: ""
@@ -460,13 +464,14 @@ function compute() {
 
         if (!size.exact) result.warnings.push("Размер картинки (" + item.width + "×" + item.height + ") не кратен " + ($("ppm").value || 128) + " px — проверьте размер");
         if (!splitAuthors(item.author).length) result.warnings.push("Автор не указан (на сайте будет «Неизвестный автор»)");
-        if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(item.date)) result.problems.push("Дата должна быть вида ГГГГ-ММ");
+        if (!item.date) result.warnings.push("Дата не указана, будет записано 0000-00 (арт без даты)");
+        else if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(item.date)) result.problems.push("Дата должна быть вида ГГГГ-ММ");
 
         result.entry = {
             id: result.id,
             author: item.author.trim() || "-",
             title: item.title.trim() || (isSmall ? "" : "-"),
-            date: item.date,
+            date: item.date || "0000-00",
             size: size.w + "x" + size.h,
             ratio: size.w + " / " + size.h,
             image: "maps/" + result.fileName,
@@ -552,6 +557,13 @@ function renderItems() {
 
         const dateInput = el("input", { type: "month", value: item.date });
         dateInput.addEventListener("input", function() { item.date = dateInput.value; refreshLight(); });
+        const noDate = el("button", { type: "button", class: "remove", style: "margin-left:0;white-space:nowrap", text: "Без даты" });
+        noDate.addEventListener("click", function() {
+            dateInput.value = "";
+            item.date = "";
+            refreshLight();
+        });
+        const dateRow = el("div", { style: "display:flex;gap:6px;align-items:stretch" }, [dateInput, noDate]);
 
         const sizeInput = el("input", { type: "text", placeholder: "авто", value: item.sizeOverride });
         sizeInput.addEventListener("input", function() { item.sizeOverride = sizeInput.value; refreshLight(); });
@@ -580,7 +592,7 @@ function renderItems() {
 
         const fields = el("div", { class: "fields" }, [
             authorField,
-            field("Дата", dateInput),
+            field("Дата", dateRow),
             field("Размер (напр. 4x3)", sizeInput),
             field("Название", titleInput),
             el("div", { class: "field", style: "justify-content:flex-end" }, [nsfwLabel]),
