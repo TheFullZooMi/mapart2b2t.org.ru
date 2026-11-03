@@ -629,6 +629,36 @@
             "ratio": "2 / 1",
             "image": "maps/ma-000063.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-000064",
+            "author": "EsdeD12",
+            "title": "-",
+            "date": "2026-11",
+            "size": "3x4",
+            "ratio": "3 / 4",
+            "image": "maps/ma-000064.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-000065",
+            "author": "_n0nam3_",
+            "title": "-",
+            "date": "2026-11",
+            "size": "2x2",
+            "ratio": "2 / 2",
+            "image": "maps/ma-000065.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-000066",
+            "author": "Endertrack, Anton_3827",
+            "title": "-",
+            "date": "2026-11",
+            "size": "5x6",
+            "ratio": "5 / 6",
+            "image": "maps/ma-000066.png",
+            "nsfw": false
         }
     ],
     "smallMaps": [
@@ -3230,6 +3260,16 @@
             "size": "1x1",
             "ratio": "1 / 1",
             "image": "maps/260.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-261",
+            "author": "_n0nam3_",
+            "title": "",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/261.png",
             "nsfw": false
         }
     ]
