@@ -115,8 +115,41 @@ pre {
 }
 .row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; align-items: center; }
 .hint { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
-ol.steps { margin: 6px 0 0; padding-left: 20px; }
-ol.steps li { margin: 4px 0; }
+
+/* ---------- Удаление артов ---------- */
+details.panel > summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+details.panel > summary::-webkit-details-marker { display: none; }
+details.panel > summary h2 { margin: 0; }
+details.panel > summary::after { content: "▾"; color: var(--accent); transition: transform .2s; }
+details.panel[open] > summary::after { transform: rotate(180deg); }
+details.panel[open] > summary { margin-bottom: 10px; }
+.del-tools { display: grid; grid-template-columns: 1fr 170px auto; gap: 10px; align-items: end; margin: 10px 0; }
+.del-status { margin: 0 0 10px; font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+.del-status b { color: var(--text); }
+.del-status .bad { color: var(--bad); font-weight: 650; }
+.del-list { display: flex; flex-direction: column; gap: 8px; }
+.del-row {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px;
+}
+.del-row.marked { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--card)); }
+.del-row.marked .del-info { text-decoration: line-through; opacity: .7; }
+.del-thumb {
+    width: 64px; height: 64px; border-radius: 8px; background: var(--field);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.del-thumb img { max-width: 100%; max-height: 100%; display: block; }
+.del-thumb.nsfw img { filter: blur(8px); }
+.del-thumb.nsfw:hover img { filter: none; }
+.del-info { min-width: 0; font-size: 12px; color: var(--muted); }
+.del-info b { color: var(--text); font-size: 13px; }
+.del-info .line { overflow-wrap: anywhere; }
+.tag { display: inline-block; padding: 0 6px; border-radius: 99px; font-size: 11px; border: 1px solid var(--border); margin-left: 4px; }
+button.danger { border-color: color-mix(in srgb, var(--bad) 60%, transparent); color: var(--bad); }
+button.danger:hover { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, var(--card)); }
+.del-row.marked button.danger { color: var(--text); background: color-mix(in srgb, var(--bad) 30%, var(--card)); border-color: var(--bad); }
+.del-more { margin-top: 10px; width: 100%; justify-content: center; }
+.del-empty { padding: 18px 0; text-align: center; color: var(--muted); }
 .err { color: var(--bad); }
 [hidden] { display: none !important; }
 
@@ -126,6 +159,8 @@ ol.steps li { margin: 4px 0; }
     .item { grid-template-columns: 1fr; }
     .thumb { width: 100%; height: 180px; }
     .fields { grid-template-columns: 1fr 1fr; }
+    .del-tools { grid-template-columns: 1fr 1fr; }
+    .del-tools .search { grid-column: 1 / -1; }
 }
 </style>
 </head>
@@ -134,7 +169,7 @@ ol.steps li { margin: 4px 0; }
 <div class="wrap">
 
     <h1>Добавить мап-арты</h1>
-    <p class="sub">Помощник для владельца сайта. Перетащите PNG, заполните данные, скачайте готовые файлы и загрузите их в репозиторий. <a href="index.html">← к галерее</a></p>
+    <p class="sub">Помощник для владельца сайта: добавление и удаление артов. Перетащите PNG, заполните данные, скачайте готовые файлы и загрузите их в репозиторий. <a href="index.html">← к галерее</a></p>
 
     <!-- ===== Состояние базы ===== -->
     <section class="panel">
@@ -176,14 +211,40 @@ ol.steps li { margin: 4px 0; }
         <div class="items" id="items"></div>
     </section>
 
+    <!-- ===== Удаление ===== -->
+    <details class="panel" id="delPanel">
+        <summary><h2>4. Удалить арты из data.json</h2></summary>
+        <p class="hint" style="margin-top:0">Отметьте арты, которые нужно убрать. Сразу ничего не удаляется: отметки учитываются в шаге «Результат», в скачанном <code>data.json</code> этих записей уже не будет. Картинки из папки <code>maps</code> в репозитории вы удаляете сами, список имён появится в результате. Номера новых артов не занимают места удалённых.</p>
+
+        <div class="del-tools">
+            <label class="field search">Поиск (номер, автор, дата, размер)
+                <input type="text" id="delSearch" placeholder="например: ma-000012, Decay, 2025-08, 4x4" autocomplete="off">
+            </label>
+            <label class="field">Раздел
+                <select id="delType">
+                    <option value="all">Все</option>
+                    <option value="big">Крупные</option>
+                    <option value="small">Мелкие (1×1)</option>
+                </select>
+            </label>
+            <button type="button" id="delClear">Снять все отметки</button>
+        </div>
+
+        <div class="del-status" id="delStatus"></div>
+        <div class="del-list" id="delList"></div>
+        <button type="button" class="del-more" id="delMore" hidden></button>
+    </details>
+
     <!-- ===== Результат ===== -->
     <section class="panel" id="resultPanel" hidden>
-        <h2>4. Результат</h2>
+        <h2>5. Результат</h2>
 
         <div id="problems" class="hint err"></div>
 
+        <div id="filesBlock">
         <h3 style="margin:14px 0 6px;font-size:13px">Файлы для папки <code>maps</code></h3>
         <div class="row" id="fileButtons"></div>
+        </div>
 
         <h3 style="margin:14px 0 6px;font-size:13px">Готовый <code>data.json</code></h3>
         <div class="row">
@@ -192,17 +253,19 @@ ol.steps li { margin: 4px 0; }
         </div>
         <p class="hint" id="jsonNote"></p>
 
+        <div id="snippetBlock">
         <h3 style="margin:14px 0 6px;font-size:13px">Или только новые записи (вставить вручную)</h3>
         <pre id="snippet"></pre>
         <div class="row"><button type="button" id="copySnippet">Скопировать записи</button></div>
         <p class="hint" id="snippetNote"></p>
+        </div>
 
-        <h3 style="margin:18px 0 6px;font-size:13px">Что делать дальше</h3>
-        <ol class="steps">
-            <li>В репозитории откройте папку <code>maps</code> → <b>Add file → Upload files</b>, перетащите скачанные PNG → <b>Commit changes</b>.</li>
-            <li>В корне репозитория загрузите скачанный <code>data.json</code> тем же способом, он заменит старый. Либо вставьте скопированные записи в нужный список вручную.</li>
-            <li>Через минуту обновите сайт (<code>Ctrl+F5</code>).</li>
-        </ol>
+        <div id="deleteBlock">
+        <h3 style="margin:14px 0 6px;font-size:13px">Удалённые из <code>data.json</code> арты: файлы для удаления из папки <code>maps</code></h3>
+        <pre id="deleteFiles"></pre>
+        <div class="row"><button type="button" id="copyDeleteFiles">Скопировать имена файлов</button></div>
+        <p class="hint" id="deleteNote"></p>
+        </div>
     </section>
 
 </div>
@@ -216,6 +279,8 @@ let db = null;                 // { bigMaps: [], smallMaps: [] }
 let knownAuthors = [];         // [{name, count}]
 const items = [];              // добавленные файлы
 let uid = 0;
+let batchId = 0;               // номер «пачки» файлов (одна загрузка/перетаскивание)
+const deleted = new Set();     // ключи артов, отмеченных к удалению: "b:ID" / "s:ID"
 
 const $ = function(id) { return document.getElementById(id); };
 
@@ -243,6 +308,7 @@ function setDb(data, label) {
         throw new Error("в файле нет списков bigMaps и smallMaps");
     }
     db = data;
+    deleted.clear();
 
     const counts = new Map();
     db.bigMaps.concat(db.smallMaps).forEach(function(map) {
@@ -257,6 +323,7 @@ function setDb(data, label) {
     dbStatus.textContent = label + ": крупных " + db.bigMaps.length + ", мелких " + db.smallMaps.length;
     dbStatus.className = "pill ok";
     refreshAll();
+    renderDelete();
 }
 
 function nextNumbers() {
@@ -314,11 +381,13 @@ document.addEventListener("paste", function(event) {
 });
 
 function addFiles(fileList) {
+    const batch = ++batchId;
     Array.from(fileList).forEach(function(file) {
         if (!file.type.startsWith("image/")) return;
 
         const item = {
             uid: ++uid,
+            batch: batch,
             file: file,
             url: URL.createObjectURL(file),
             width: 0, height: 0,
@@ -443,9 +512,15 @@ function refreshLight() {
     renderResult();
 }
 
+// новые файлы показываются сверху (свежая пачка первой, внутри пачки — по порядку).
+// Нумерация ID при этом остаётся по порядку добавления (массив items не переставляется).
+function displayItems() {
+    return items.slice().sort(function(a, b) { return b.batch - a.batch || a.uid - b.uid; });
+}
+
 function renderItems() {
     itemsEl.textContent = "";
-    items.forEach(function(item, index) {
+    displayItems().forEach(function(item) {
         const card = el("div", { class: "item", "data-uid": item.uid });
 
         const thumb = el("div", { class: "thumb" }, [el("img", { src: item.url, alt: "" })]);
@@ -492,7 +567,7 @@ function renderItems() {
         const remove = el("button", { type: "button", class: "remove", text: "Убрать" });
         remove.addEventListener("click", function() {
             URL.revokeObjectURL(item.url);
-            items.splice(index, 1);
+            items.splice(items.indexOf(item), 1);
             refreshAll();
         });
 
@@ -555,6 +630,8 @@ function download(blob, name) {
 
 function buildJson(results) {
     const base = db ? JSON.parse(JSON.stringify(db)) : { bigMaps: [], smallMaps: [] };
+    base.bigMaps = base.bigMaps.filter(function(m) { return !deleted.has("b:" + m.id); });
+    base.smallMaps = base.smallMaps.filter(function(m) { return !deleted.has("s:" + m.id); });
     results.forEach(function(r) {
         (r.isSmall ? base.smallMaps : base.bigMaps).push(r.entry);
     });
@@ -573,16 +650,34 @@ function buildSnippets(results) {
     return text;
 }
 
+function deletedEntries() {
+    const found = [];
+    if (!db) return found;
+    db.bigMaps.forEach(function(m) { if (deleted.has("b:" + m.id)) found.push({ map: m, big: true }); });
+    db.smallMaps.forEach(function(m) { if (deleted.has("s:" + m.id)) found.push({ map: m, big: false }); });
+    return found;
+}
+
+function imageName(map) {
+    return String(map.image || map.id || "").split("/").pop();
+}
+
 function renderResult() {
     const panel = $("resultPanel");
     const ready = lastResults.filter(function(r) { return r.entry; });
-    panel.hidden = !items.length;
-    if (!items.length) return;
+    const removed = deletedEntries();
+    const hasWork = items.length || removed.length;
+    panel.hidden = !hasWork;
+    if (!hasWork) return;
 
     const blocking = lastResults.filter(function(r) { return r.problems.length || !r.entry; });
     $("problems").textContent = blocking.length
         ? "Исправьте ошибки (✖) в карточках, пока они есть, готовые файлы могут быть неверными."
         : "";
+
+    $("filesBlock").hidden = !ready.length;
+    $("snippetBlock").hidden = !ready.length;
+    $("deleteBlock").hidden = !removed.length;
 
     const buttons = $("fileButtons");
     buttons.textContent = "";
@@ -599,13 +694,24 @@ function renderResult() {
         buttons.insertBefore(all, buttons.firstChild);
     }
 
-    $("dlJson").disabled = !ready.length;
-    $("copyJson").disabled = !ready.length;
-    $("jsonNote").textContent = db
-        ? "Это текущий data.json плюс новые записи: " + ready.length + "."
-        : "data.json не загружен, в файл попадут только новые записи. Лучше сначала выбрать data.json в шаге 1.";
+    const canExport = ready.length || removed.length;
+    $("dlJson").disabled = !canExport;
+    $("copyJson").disabled = !canExport;
+
+    if (db) {
+        const bits = [];
+        if (ready.length) bits.push("плюс новые записи: " + ready.length);
+        if (removed.length) bits.push("минус удалённые: " + removed.length);
+        $("jsonNote").textContent = "Это текущий data.json" + (bits.length ? ", " + bits.join(", ") : "") + ".";
+    } else {
+        $("jsonNote").textContent = "data.json не загружен, в файл попадут только новые записи. Лучше сначала выбрать data.json в шаге 1.";
+    }
+
     $("snippet").textContent = buildSnippets(ready);
     $("snippetNote").textContent = "";
+
+    $("deleteFiles").textContent = removed.map(function(e) { return imageName(e.map); }).join("\n");
+    $("deleteNote").textContent = "Записей удалено из data.json: " + removed.length + ". Сами картинки в папке maps репозитория остаются, пока вы их не удалите.";
 }
 
 $("dlJson").addEventListener("click", function() {
@@ -626,6 +732,129 @@ $("copyJson").addEventListener("click", function() {
 $("copySnippet").addEventListener("click", function() {
     const ready = lastResults.filter(function(r) { return r.entry; });
     copyText(buildSnippets(ready), $("snippetNote"));
+});
+
+$("copyDeleteFiles").addEventListener("click", function() {
+    copyText($("deleteFiles").textContent, $("deleteNote"));
+});
+
+/* =========================================================
+   УДАЛЕНИЕ АРТОВ ИЗ data.json
+   ========================================================= */
+
+const DEL_PAGE = 40;
+const delState = { shown: DEL_PAGE };
+
+function idNumber(id) {
+    const m = String(id).match(/(\d+)\s*$/);
+    return m ? parseInt(m[1], 10) : 0;
+}
+
+function delFiltered() {
+    if (!db) return [];
+    const type = $("delType").value;
+    const query = $("delSearch").value.trim().toLowerCase();
+    const wrap = function(list, big) { return list.map(function(m) { return { map: m, big: big }; }); };
+    const newestFirst = function(a, b) { return idNumber(b.map.id) - idNumber(a.map.id); };
+
+    let all = [];
+    if (type !== "small") all = all.concat(wrap(db.bigMaps, true).sort(newestFirst));
+    if (type !== "big") all = all.concat(wrap(db.smallMaps, false).sort(newestFirst));
+
+    if (query) {
+        all = all.filter(function(e) {
+            const m = e.map;
+            return [m.id, m.author, m.date, m.title, m.size].join(" ").toLowerCase().indexOf(query) !== -1;
+        });
+    }
+    return all;
+}
+
+function delKey(entry) {
+    return (entry.big ? "b:" : "s:") + entry.map.id;
+}
+
+function updateDelStatus(foundCount) {
+    const status = $("delStatus");
+    status.textContent = "";
+    if (!db) return;
+    status.appendChild(el("span", {}, [document.createTextNode("Найдено: "), el("b", { text: String(foundCount) })]));
+    status.appendChild(el("span", {}, [document.createTextNode("Всего в базе: "), el("b", { text: String(db.bigMaps.length + db.smallMaps.length) })]));
+    if (deleted.size) status.appendChild(el("span", { class: "bad", text: "Отмечено к удалению: " + deleted.size }));
+    $("delClear").disabled = !deleted.size;
+}
+
+function renderDelete() {
+    const list = $("delList");
+    const more = $("delMore");
+    list.textContent = "";
+
+    if (!db) {
+        list.appendChild(el("div", { class: "del-empty", text: "Сначала загрузите data.json (шаг 1)." }));
+        more.hidden = true;
+        updateDelStatus(0);
+        return;
+    }
+
+    const found = delFiltered();
+    updateDelStatus(found.length);
+
+    if (!found.length) {
+        list.appendChild(el("div", { class: "del-empty", text: "Ничего не найдено." }));
+        more.hidden = true;
+        return;
+    }
+
+    found.slice(0, delState.shown).forEach(function(entry) {
+        const map = entry.map;
+        const key = delKey(entry);
+
+        const img = el("img", { alt: "", loading: "lazy" });
+        if (map.image) img.src = map.image;
+        img.addEventListener("error", function() { img.remove(); });
+        const thumb = el("div", { class: "del-thumb" + (map.nsfw ? " nsfw" : "") }, [img]);
+
+        const title = el("div", { class: "line" }, [el("b", { text: String(map.id) })]);
+        title.appendChild(el("span", { class: "tag", text: map.size || "" }));
+        title.appendChild(el("span", { class: "tag", text: entry.big ? "крупный" : "мелкий" }));
+        if (map.nsfw) title.appendChild(el("span", { class: "tag", text: "18+" }));
+
+        const authorLine = el("div", { class: "line", text: (splitAuthors(map.author).join(", ") || "автор не указан") + " · " + (map.date || "без даты") });
+        const info = el("div", { class: "del-info" }, [title, authorLine]);
+        if (map.title && map.title !== "-") info.appendChild(el("div", { class: "line", text: map.title }));
+
+        const button = el("button", { type: "button", class: "danger" });
+        const row = el("div", { class: "del-row" }, [thumb, info, button]);
+
+        function paint() {
+            const marked = deleted.has(key);
+            row.classList.toggle("marked", marked);
+            button.textContent = marked ? "Вернуть" : "Удалить";
+        }
+        button.addEventListener("click", function() {
+            if (deleted.has(key)) deleted.delete(key); else deleted.add(key);
+            paint();
+            updateDelStatus(found.length);
+            renderResult();
+        });
+
+        paint();
+        list.appendChild(row);
+    });
+
+    const left = found.length - delState.shown;
+    more.hidden = left <= 0;
+    if (left > 0) more.textContent = "Показать ещё (" + Math.min(DEL_PAGE, left) + " из " + left + ")";
+}
+
+$("delPanel").addEventListener("toggle", function() { if ($("delPanel").open) renderDelete(); });
+$("delSearch").addEventListener("input", function() { delState.shown = DEL_PAGE; renderDelete(); });
+$("delType").addEventListener("change", function() { delState.shown = DEL_PAGE; renderDelete(); });
+$("delMore").addEventListener("click", function() { delState.shown += DEL_PAGE; renderDelete(); });
+$("delClear").addEventListener("click", function() {
+    deleted.clear();
+    renderDelete();
+    renderResult();
 });
 
 // изменение общих значений сразу меняет расчёт

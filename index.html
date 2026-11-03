@@ -1127,7 +1127,52 @@ header {
 .authors-rank { text-align: center; font-weight: 700; color: var(--muted); font-size: 13px; }
 .authors-row.top .authors-rank { color: var(--accent); font-size: 15px; }
 .authors-name { font-weight: 650; font-size: 14px; overflow-wrap: anywhere; }
-.authors-count { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.authors-count { text-align: right; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.25; }
+.authors-count b { display: block; font-size: 14px; color: var(--text); }
+.authors-count small { font-size: 11px; }
+
+.authors-how {
+    margin: 0 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--glass);
+    font-size: 12px;
+}
+.authors-how summary {
+    padding: 9px 12px;
+    cursor: pointer;
+    font-weight: 650;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.authors-how summary::-webkit-details-marker { display: none; }
+.authors-how summary::after { content: "▾"; color: var(--accent); transition: transform .2s; }
+.authors-how[open] summary::after { transform: rotate(180deg); }
+.authors-how-body { padding: 0 12px 12px; color: var(--muted); line-height: 1.45; }
+.authors-how-body p { margin: 0 0 8px; }
+.authors-how-body b { color: var(--text); }
+.authors-how-rule {
+    display: flex; gap: 8px; align-items: baseline;
+    margin: 0 0 6px;
+}
+.authors-how-rule i {
+    flex: 0 0 auto; min-width: 20px; height: 20px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    color: var(--accent); font-style: normal; font-weight: 700; font-size: 11px;
+}
+.authors-how-example {
+    margin: 10px 0 0; padding: 8px 10px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.authors-how-example .ex-title { margin: 0 0 5px; color: var(--text); font-weight: 650; }
+.authors-how-example .ex-row { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; }
+.authors-how-example .ex-row span:last-child { color: var(--text); font-weight: 650; white-space: nowrap; }
 .authors-bar {
     grid-column: 2 / 4;
     height: 5px;
@@ -1915,6 +1960,28 @@ body { overflow-x: clip; }
 
         <div class="stats-pane" id="paneAuthors">
             <p class="authors-sub" id="authorsSub"></p>
+
+            <details class="authors-how">
+                <summary>Как считается рейтинг?</summary>
+                <div class="authors-how-body">
+                    <p>Рейтинг строится по <b>количеству карт</b>, а не по количеству артов: чем больше карт автор построил, тем выше он в списке.</p>
+
+                    <div class="authors-how-rule"><i>1</i><span>Размер арта — это <b>ширина × высота</b> в картах. Арт 3×3 — это 9 карт, арт 1×1 — одна карта.</span></div>
+                    <div class="authors-how-rule"><i>2</i><span>Если у арта <b>несколько авторов</b>, карты делятся между ними поровну: на двоих по ½ арта, на троих по ⅓ и так далее.</span></div>
+                    <div class="authors-how-rule"><i>3</i><span>Справа у каждого автора указаны его карты, а под ними — сколько артов он сделал (или в которых участвовал).</span></div>
+
+                    <div class="authors-how-example">
+                        <p class="ex-title">Пример</p>
+                        <div class="ex-row"><span>Автор А: 10 артов 1×1</span><span>10 карт</span></div>
+                        <div class="ex-row"><span>Автор Б: 3 арта 3×3</span><span>27 карт ← выше</span></div>
+                        <div class="ex-row"><span>Арт 4×4 (16 карт) на двоих</span><span>по 8 карт</span></div>
+                        <div class="ex-row"><span>Арт 4×4 (16 карт) на троих</span><span>по 5,33 карты</span></div>
+                    </div>
+
+                    <p style="margin-top:8px">Арты без указанного автора в рейтинг не попадают. Нажмите на автора, чтобы увидеть все его арты.</p>
+                </div>
+            </details>
+
             <ol class="authors-list" id="authorsList"></ol>
             <button type="button" class="authors-more" id="authorsMore" hidden></button>
         </div>
@@ -2323,12 +2390,102 @@ function selectionKey(map, big) {
     return (big ? "b:" : "s:") + String(map.id);
 }
 
+/* =========================================================
+   КОРОТКИЕ ССЫЛКИ
+   В ссылку попадает только тип и номер арта:
+     один арт:      #art=b12  (b — большой, s — маленький)
+     выбор артов:   #b=1-5,8&s=10-30,45  (подряд идущие номера — диапазоном)
+   Старые ссылки (#art=ma-000012, #maps=...) продолжают работать.
+   ========================================================= */
+
+const shortIndex = new Map();      // "b12" / "s7" -> арт
+const shortCollided = new Set();   // ключи, у которых номер повторился (на случай будущих данных)
+let pendingShortSelection = [];    // выбранные арты из ссылки, ждут загрузки data.json
+
+function mapNumber(map) {
+    const found = String(map.id).match(/\d+/);
+    return found ? parseInt(found[0], 10) : NaN;
+}
+
+function shortKey(map, big) {
+    return (big ? "b" : "s") + mapNumber(map);
+}
+
+function buildShortIndex() {
+    shortIndex.clear();
+    shortCollided.clear();
+    [[allData.bigMaps, true], [allData.smallMaps, false]].forEach(function(pair) {
+        pair[0].forEach(function(map) {
+            const key = shortKey(map, pair[1]);
+            if (key.indexOf("NaN") !== -1 || (shortIndex.has(key) && shortIndex.get(key) !== map)) {
+                shortCollided.add(key);
+            } else {
+                shortIndex.set(key, map);
+            }
+        });
+    });
+}
+
+// то, что попадает в ссылку на один арт (при нестандартном id — полный id)
+function artRef(map) {
+    const big = allData.bigMaps.indexOf(map) !== -1;
+    const key = shortKey(map, big);
+    return shortIndex.get(key) === map ? key : String(map.id);
+}
+
+// по значению из ссылки находим арт: сначала короткий вид, затем старый полный id
+function findMapByRef(ref) {
+    if (shortIndex.has(ref) && !shortCollided.has(ref)) return shortIndex.get(ref);
+    const all = allData.bigMaps.concat(allData.smallMaps);
+    return all.find(function(item) { return String(item.id) === ref; }) || null;
+}
+
+function packNumbers(nums) {
+    nums = nums.slice().sort(function(a, b) { return a - b; });
+    const parts = [];
+    let i = 0;
+    while (i < nums.length) {
+        let j = i;
+        while (j + 1 < nums.length && nums[j + 1] === nums[j] + 1) j++;
+        parts.push(j - i >= 2 ? nums[i] + "-" + nums[j] : nums.slice(i, j + 1).join(","));
+        i = j + 1;
+    }
+    return parts.join(",");
+}
+
+function unpackNumbers(text) {
+    const nums = [];
+    String(text || "").split(",").forEach(function(part) {
+        const m = part.match(/^(\d+)(?:-(\d+))?$/);
+        if (!m) return;
+        const from = parseInt(m[1], 10);
+        const to = m[2] ? Math.min(parseInt(m[2], 10), from + 5000) : from;
+        for (let n = from; n <= to; n++) nums.push(n);
+    });
+    return nums;
+}
+
 function readSelectionFromUrl() {
-    const raw = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("maps");
+    const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+
+    // новый короткий формат: #b=1-5,8&s=10-30
+    unpackNumbers(params.get("b")).forEach(function(n) { pendingShortSelection.push("b" + n); });
+    unpackNumbers(params.get("s")).forEach(function(n) { pendingShortSelection.push("s" + n); });
+
+    // старый формат #maps=... (оставлен для совместимости со старыми ссылками)
+    const raw = params.get("maps");
     if (!raw) return;
     raw.split(",").map(function(item) { return decodeURIComponent(item); }).filter(Boolean).forEach(function(item) {
         selectedIds.add(item.indexOf(":") === -1 ? "b:" + item : item);
     });
+}
+
+function resolvePendingSelection() {
+    pendingShortSelection.forEach(function(ref) {
+        const map = findMapByRef(ref);
+        if (map) selectedIds.add(selectionKey(map, ref.charAt(0) === "b"));
+    });
+    pendingShortSelection = [];
 }
 
 function updateSelectionUI() {
@@ -2356,8 +2513,23 @@ function toggleSelected(map, big) {
 }
 
 function copySelectionLink() {
-    const ids = Array.from(selectedIds).map(function(id) { return encodeURIComponent(id); });
-    const url = window.location.origin + window.location.pathname + "#maps=" + ids.join(",");
+    const all = allData.bigMaps.concat(allData.smallMaps);
+    const nums = { b: [], s: [] };
+    const legacy = [];
+    selectedIds.forEach(function(key) {
+        const type = key.charAt(0);
+        const id = key.slice(2);
+        const map = all.find(function(item) { return String(item.id) === id; });
+        if (!map) return;
+        const short = shortKey(map, type === "b");
+        if (shortIndex.get(short) === map) nums[type].push(mapNumber(map));
+        else legacy.push(encodeURIComponent(key));
+    });
+    const parts = [];
+    if (nums.b.length) parts.push("b=" + packNumbers(nums.b));
+    if (nums.s.length) parts.push("s=" + packNumbers(nums.s));
+    if (legacy.length) parts.push("maps=" + legacy.join(","));
+    const url = window.location.origin + window.location.pathname + "#" + parts.join("&");
     navigator.clipboard.writeText(url).then(function() {
         const oldText = selectionCopy.innerHTML;
         selectionCopy.textContent = "Ссылка скопирована ✓";
@@ -2541,6 +2713,41 @@ function escapeHtml(text) {
    SORT
    ========================================================= */
 
+function getOrderNumber(map) {
+
+    // порядковый номер арта берём из id (первое число в нём)
+    if (typeof map.id === "number") {
+        return map.id;
+    }
+
+    const found = String(map.id || "").match(/\d+/);
+
+    return found
+        ? parseInt(found[0], 10)
+        : 0;
+
+}
+
+
+function compareByDate(a, b, direction) {
+
+    // direction: 1 = старые → новые, -1 = новые → старые
+    const byDate =
+        (a.date || "").localeCompare(b.date || "");
+
+    if (byDate !== 0) {
+        return byDate * direction;
+    }
+
+    // одинаковый месяц — сравниваем по порядковому номеру
+    return (
+        getOrderNumber(a) -
+        getOrderNumber(b)
+    ) * direction;
+
+}
+
+
 function sortMaps(maps) {
 
     const result =
@@ -2555,12 +2762,7 @@ function sortMaps(maps) {
         result.sort(
             function(a, b) {
 
-                return (
-                    (b.date || "")
-                    .localeCompare(
-                        a.date || ""
-                    )
-                );
+                return compareByDate(a, b, -1);
 
             }
         );
@@ -2576,12 +2778,7 @@ function sortMaps(maps) {
         result.sort(
             function(a, b) {
 
-                return (
-                    (a.date || "")
-                    .localeCompare(
-                        b.date || ""
-                    )
-                );
+                return compareByDate(a, b, 1);
 
             }
         );
@@ -3069,6 +3266,9 @@ async function loadData() {
             ? data.smallMaps
             : [];
 
+        buildShortIndex();
+        resolvePendingSelection();
+
         populateYearFilter();
 
         render();
@@ -3155,7 +3355,7 @@ function setArtHash(id) {
 }
 
 function artLink(map) {
-    return window.location.origin + window.location.pathname + "#art=" + encodeURIComponent(map.id);
+    return window.location.origin + window.location.pathname + "#art=" + encodeURIComponent(artRef(map));
 }
 
 function renderViewerAuthors(map) {
@@ -3199,7 +3399,7 @@ function showViewerMap(map) {
     viewerCounter.textContent = total > 1 ? (viewerCtx.index + 1) + " / " + total : "";
     viewerPrev.hidden = viewerNext.hidden = total < 2;
 
-    setArtHash(map.id);
+    setArtHash(artRef(map));
 
     // подгружаем соседей, чтобы листание было мгновенным
     [-1, 1].forEach(function(step) {
@@ -3261,8 +3461,7 @@ viewerLink.addEventListener("click", function(event) {
 function openArtFromHash() {
     const raw = new URLSearchParams(window.location.hash.replace(/^#/, "")).get("art");
     if (!raw) return false;
-    const all = allData.bigMaps.concat(allData.smallMaps);
-    const map = all.find(function(item) { return String(item.id) === raw; });
+    const map = findMapByRef(raw);
     if (!map || !viewerAllowed(map)) return false;
     if (!(visibleLists.big.indexOf(map) !== -1 || visibleLists.small.indexOf(map) !== -1)) {
         resetFilters();   // арт скрыт фильтрами — показываем всё
@@ -3500,30 +3699,67 @@ function splitAuthors(value) {
         .filter(function(name) { return name && name !== "-" && name !== "—"; });
 }
 
+function roundShare(value) {
+    return Math.round(value * 100) / 100;
+}
+
+function formatShare(value) {
+    // до двух знаков после запятой, без лишних нулей: 27, 8,5, 5,33
+    return String(roundShare(value)).replace(".", ",");
+}
+
+function pluralRu(n, one, few, many) {
+    // для дробных значений — родительный падеж единственного числа («2,5 карты»)
+    if (n % 1 !== 0) return few;
+    const mod10 = n % 10, mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return one;
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few;
+    return many;
+}
+
 function computeTopAuthors() {
     const all = allData.bigMaps.concat(allData.smallMaps);
     const stats = new Map();
     let unknown = 0;
+    let totalCells = 0;
 
     all.forEach(function(map) {
-        const names = splitAuthors(map.author);
-        if (!names.length) { unknown++; return; }
+        const cells = getArea(map);
+        totalCells += cells;
 
+        // уникальные авторы арта (без учёта регистра)
+        const names = [];
         const seen = new Set();
-        names.forEach(function(name) {
+        splitAuthors(map.author).forEach(function(name) {
             const key = name.toLowerCase();
             if (seen.has(key)) return;
             seen.add(key);
-            if (!stats.has(key)) stats.set(key, { name: name, count: 0 });
-            stats.get(key).count++;
+            names.push(name);
+        });
+
+        if (!names.length) { unknown++; return; }
+
+        // карты арта делятся между соавторами поровну
+        const share = cells / names.length;
+
+        names.forEach(function(name) {
+            const key = name.toLowerCase();
+            if (!stats.has(key)) stats.set(key, { name: name, maps: 0, arts: 0 });
+            const entry = stats.get(key);
+            entry.maps += share;
+            entry.arts++;
         });
     });
 
     const list = Array.from(stats.values()).sort(function(a, b) {
-        return b.count - a.count || a.name.localeCompare(b.name, "ru", { sensitivity: "base" });
+        return (
+            roundShare(b.maps) - roundShare(a.maps) ||
+            b.arts - a.arts ||
+            a.name.localeCompare(b.name, "ru", { sensitivity: "base" })
+        );
     });
 
-    return { list: list, total: all.length, unknown: unknown };
+    return { list: list, total: all.length, unknown: unknown, totalCells: totalCells };
 }
 
 function renderAuthors() {
@@ -3532,7 +3768,8 @@ function renderAuthors() {
 
     authorsList.innerHTML = "";
     authorsSub.textContent =
-        "Артов: " + result.total + " · авторов: " + list.length +
+        "Артов: " + result.total + " · карт: " + result.totalCells +
+        " · авторов: " + list.length +
         (result.unknown ? " · автор не указан: " + result.unknown : "");
 
     if (!list.length) {
@@ -3541,12 +3778,13 @@ function renderAuthors() {
         return;
     }
 
-    const max = list[0].count;
+    const max = roundShare(list[0].maps) || 1;
     const visible = authorsShowAll ? list : list.slice(0, AUTHORS_PREVIEW);
 
     visible.forEach(function(author) {
-        // одинаковое число артов — одинаковое место
-        const rank = 1 + list.filter(function(a) { return a.count > author.count; }).length;
+        // одинаковое число карт — одинаковое место
+        const mine = roundShare(author.maps);
+        const rank = 1 + list.filter(function(a) { return roundShare(a.maps) > mine; }).length;
 
         const row = document.createElement("li");
         row.className = "authors-row clickable" + (rank <= 3 ? " top" : "");
@@ -3563,12 +3801,16 @@ function renderAuthors() {
 
         const countEl = document.createElement("span");
         countEl.className = "authors-count";
-        countEl.textContent = author.count;
+        const mainLine = document.createElement("b");
+        mainLine.textContent = formatShare(author.maps) + " " + pluralRu(mine, "карта", "карты", "карт");
+        const subLine = document.createElement("small");
+        subLine.textContent = author.arts + " " + pluralRu(author.arts, "арт", "арта", "артов");
+        countEl.append(mainLine, subLine);
 
         const bar = document.createElement("div");
         bar.className = "authors-bar";
         const fill = document.createElement("i");
-        fill.style.width = (author.count / max * 100) + "%";
+        fill.style.width = (mine / max * 100) + "%";
         bar.appendChild(fill);
 
         row.append(rankEl, nameEl, countEl, bar);
