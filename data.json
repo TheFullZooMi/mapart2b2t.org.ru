@@ -3271,6 +3271,36 @@
             "ratio": "1 / 1",
             "image": "maps/261.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-262",
+            "author": "gazon",
+            "title": "Рилай",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/262.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-263",
+            "author": "gazon",
+            "title": "Дриада(коза)",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/263.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-264",
+            "author": "gazon",
+            "title": "Пак",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/264.png",
+            "nsfw": false
         }
     ]
 }
