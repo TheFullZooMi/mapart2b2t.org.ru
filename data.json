@@ -3301,6 +3301,16 @@
             "ratio": "1 / 1",
             "image": "maps/264.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-265",
+            "author": "gazon",
+            "title": "The Holy Knight(чен)",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/265.png",
+            "nsfw": false
         }
     ]
 }
