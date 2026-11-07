@@ -923,36 +923,6 @@
             "nsfw": false
         },
         {
-            "id": "ma-27",
-            "author": "-",
-            "title": "",
-            "date": "0000-00",
-            "size": "1x1",
-            "ratio": "1 / 1",
-            "image": "maps/27.png",
-            "nsfw": false
-        },
-        {
-            "id": "ma-28",
-            "author": "-",
-            "title": "",
-            "date": "0000-00",
-            "size": "1x1",
-            "ratio": "1 / 1",
-            "image": "maps/28.png",
-            "nsfw": false
-        },
-        {
-            "id": "ma-29",
-            "author": "-",
-            "title": "",
-            "date": "0000-00",
-            "size": "1x1",
-            "ratio": "1 / 1",
-            "image": "maps/29.png",
-            "nsfw": false
-        },
-        {
             "id": "ma-30",
             "author": "_n0nam3_",
             "title": "",
@@ -2290,26 +2260,6 @@
             "size": "1x1",
             "ratio": "1 / 1",
             "image": "maps/163.png",
-            "nsfw": false
-        },
-        {
-            "id": "ma-164",
-            "author": "BlueNitro",
-            "title": "",
-            "date": "2022-04",
-            "size": "1x1",
-            "ratio": "1 / 1",
-            "image": "maps/164.png",
-            "nsfw": false
-        },
-        {
-            "id": "ma-165",
-            "author": "-",
-            "title": "",
-            "date": "2022-04",
-            "size": "1x1",
-            "ratio": "1 / 1",
-            "image": "maps/165.png",
             "nsfw": false
         },
         {
