@@ -3311,6 +3311,36 @@
             "ratio": "1 / 1",
             "image": "maps/265.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-266",
+            "author": "gazon",
+            "title": "Ezalor(Котёл)",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/266.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-267",
+            "author": "gazon",
+            "title": "lina Inverse(Лина)",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/267.png",
+            "nsfw": false
+        },
+        {
+            "id": "ma-268",
+            "author": "gazon",
+            "title": "The Lord Of Olympia(Зевс)",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/268.png",
+            "nsfw": false
         }
     ]
 }
