@@ -669,6 +669,16 @@
             "ratio": "1 / 2",
             "image": "maps/ma-000067.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-000068",
+            "author": "dert32",
+            "title": "-",
+            "date": "2026-11",
+            "size": "3x5",
+            "ratio": "3 / 5",
+            "image": "maps/ma-000068.png",
+            "nsfw": false
         }
     ],
     "smallMaps": [
