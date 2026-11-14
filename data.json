@@ -3281,6 +3281,16 @@
             "ratio": "1 / 1",
             "image": "maps/268.png",
             "nsfw": false
+        },
+        {
+            "id": "ma-269",
+            "author": "gazon, TheFullZooMi, 2b2tps",
+            "title": "С днём рождения, Vladvortex!",
+            "date": "2026-11",
+            "size": "1x1",
+            "ratio": "1 / 1",
+            "image": "maps/269.png",
+            "nsfw": false
         }
     ]
 }
